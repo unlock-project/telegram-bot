@@ -9,7 +9,9 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
+from aiohttp import web
 
+from server import AppBundle
 from utils import config
 from utils import messages
 from utils import models
@@ -39,6 +41,7 @@ logging.basicConfig(
 )
 
 unlock_api = UnlockAPI(config.getUnlockApiURL())
+app = AppBundle()
 
 
 class UserState(StatesGroup):
@@ -198,6 +201,7 @@ async def promocode_enter(message: types.Message, state: FSMContext):
         await bot.send_message(chat_id, data["msg"])
     # await unlock_api.sendPromocode(user.id, promocode_model.id)
 
+
 # if data["success"]:
 #     await bot.edit_message_text(callback.message.text + f"\n\n {messages.voted.format(choice=choice.name)}",
 #                                 chat_id,
@@ -287,6 +291,7 @@ async def promocode_button(message: types.Message):
 
 @dp.message_handler(IsAdmin(), filters.Text(equals=messages.back))
 async def back_button(message: types.Message):
+    chat_id = message.chat.id
     try:
         user = models.User.get(chat_id=chat_id)
     except:
@@ -476,5 +481,21 @@ async def make_choice_event(callback: types.CallbackQuery):
     return
 
 
+@app.post('/sendMessage')
+async def apiMessage(request: web.Request):
+    if request.content_type != 'application/json':
+        return web.json_response({'reason': 'non-json data'}, status=400)
+    body = await request.json()
+    if 'chat_id' not in body or 'message' not in body:
+        return web.json_response({'reason': 'has no expected data'}, status=400)
+    try:
+        chat_id = int(body['chat_id'])
+        message = body['message']
+        await bot.send_message(chat_id, message)
+    except Exception as ex:
+        return web.json_response({'reason': ex.args}, status=400)
+    return web.json_response({'ok': True}, status=200)
+
+
 if __name__ == "__main__":
-    executor.start_polling(dp, skip_updates=True)
+    app.run(bot, dp)
