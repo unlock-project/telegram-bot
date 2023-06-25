@@ -1,35 +1,19 @@
 import logging
 import ssl
-import typing
 
 import aiogram
 from aiogram.dispatcher.webhook import get_new_configured_app
-from aiohttp import hdrs, web
+from aiohttp import web
 from aiogram.dispatcher import Dispatcher
-from .route import Route
 from .settings import WEBHOOK_PATH, WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV, WEBAPP_HOST, WEBAPP_PORT, WEBHOOK_URL
 
 
 class AppBundle:
-    routes: typing.List[Route]
 
     def __init__(self):
-        self.routes = []
+        pass
 
-    def get(self, path: str):
-        def decorator(func: typing.Callable):
-            self.routes.append(Route(hdrs.METH_GET, path, func))
-            return func
-
-        return decorator
-
-    def post(self, path: str):
-        def decorator(func: typing.Callable):
-            self.routes.append(Route(hdrs.METH_POST, path, func))
-
-        return decorator
-
-    def run(self, bot: aiogram.Bot, dp: Dispatcher):
+    def run(self, bot: aiogram.Bot, dp: Dispatcher, routes):
         async def on_startup(*args, **kwargs):
             await bot.set_webhook(WEBHOOK_URL)
 
@@ -53,8 +37,7 @@ class AppBundle:
         app.on_startup.append(on_startup)
         app.on_shutdown.append(on_shutdown)
 
-        for route in self.routes:
-            app.router.add_route(route.method, route.path, route.func)
+        app.router.add_routes(routes)
         # Generate SSL context
         context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
         context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
