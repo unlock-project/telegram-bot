@@ -1,0 +1,360 @@
+openapi: 3.0.3
+info:
+  title: Unlock ChatBot - OpenAPI 3.0
+  description: |-
+    Здесь представлена схема обращения к боту
+    
+  contact:
+    email: summedjesters@gmail.com
+  version: 0.0.1
+servers:
+  - url: https://unlock.sumjest.ru/api/
+tags:
+  - name: Broadcast
+    description: Broadcast methods
+  - name: Update
+    description: Update methods
+paths:
+  /sendmessage:
+    post:
+      summary: Send message to user
+      description: Send message to user
+      operationId: sendmessage
+      requestBody:
+        description: Send message to user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessageRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageSentResponse'          
+        '400':
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /message/publish:
+    post:
+      tags:
+        - Broadcast
+      summary: Send message to users
+      description: Send message to users. Leave "chat_ids" empty, if want to broadcast to all users.
+      operationId: message_publish
+      requestBody:
+        description: Send message to user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BroadcastMessageRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BroadcastMessageResponse'          
+        '400':
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /vote/publish:
+    post:
+      tags: 
+        - Broadcast
+      summary: Start vote
+      description: bla bla bla
+      operationId: vote_publish
+      requestBody:
+        description: Send vote
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BroadcastVoteRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BroadcastVoteResponse'
+        '400':
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /question/publish:
+    post:
+      tags: 
+        - Broadcast
+      summary: Start question
+      description: bla bla bla
+      operationId: question_publish
+      requestBody:
+        description: Send question
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BroadcastQuestionRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BroadcastQuestionResponse'
+        '400':
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'    
+  /registration/publish:
+    post:
+      tags: 
+        - Broadcast
+      summary: Start event registration
+      description: bla bla bla
+      operationId: registration_publish
+      requestBody:
+        description: Send registration
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BroadcastRegistrationRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BroadcastRegistrationResponse'
+        '400':
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'   
+  /registration/update:
+    post:
+      tags: 
+        - Update
+      summary: Update event registration message
+      description: bla bla bla
+      operationId: registration_update
+      requestBody:
+        description: Update registration
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRegistrationRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateRegistrationResponse'
+        '400':
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'   
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          example: "Non-json data"
+    SendMessageRequest:
+      type: object
+      required:
+        - user_id
+        - message
+      properties:
+        user_id:
+          type: integer
+          format: int64
+          example: 123
+        message:
+          type: string
+          example: "Hello world!"
+    BroadcastMessageRequest:
+      type: object
+      required:
+        - message_id
+        - message_text
+      properties:
+        message_id: 
+          type: integer
+          format: int64
+          example: 0
+          
+        message_text:
+          type: string
+          example: "Hello world!"
+          
+    BroadcastMessageResponse:
+      type: object
+      required:
+        - message_id
+      properties:
+        message_id:
+          type: integer
+          format: int64
+          example: 0
+          
+    MessageSentResponse:
+      type: object
+      required:
+        - message
+        - message_id     
+      properties:
+        message:
+          type: string
+          example: "Hello world!"
+        message_id:
+          type: integer
+          format: int64
+          example: 1
+
+    BroadcastVoteRequest:
+      type: object
+      required:
+        - vote_id
+        - vote_text      
+        - options
+      properties:
+        vote_id:
+          type: integer
+          format: int64
+          example: 0
+        vote_text:
+          type: string
+          example: "Which option?"
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option'
+          example:
+            - option_id: 0
+              option_text: "string"          
+    BroadcastVoteResponse:
+      type: object
+      required:
+        - vote_id      
+      properties:
+        vote_id:
+          type: integer
+          format: int64
+          example: 0
+    BroadcastQuestionRequest:
+      type: object
+      required:
+        - question_id  
+        - question_text
+      properties:
+        question_id:
+          type: integer
+          format: int64
+          example: 0
+        question_text:
+          type: string
+          example: "string"
+    BroadcastQuestionResponse:
+      type: object
+      required:
+        - question_id  
+      properties:
+        question_id:
+          type: integer
+          example: 0
+    Option:
+      type: object
+      required:
+        - option_id
+        - option_text
+      properties:
+        option_id:
+          type: integer
+          format: int64
+          example: 0
+        option_text:
+          type: string
+          example: "First option"
+    BroadcastRegistrationRequest:
+      type: object
+      required:
+        - registration_id
+        - registration_text
+        - options
+      properties:
+        registration_id:
+          type: integer
+          format: int64
+          example: 0
+        registration_text:
+          type: string
+          example: "string"
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option'
+          example:
+            - option_id: 0
+              option_text: "string"
+    UpdateRegistrationRequest:
+      type: object
+      required:
+        - registration_id
+        - registration_text
+        - options
+      properties:
+        registration_id:
+          type: integer
+          format: int64
+          example: 0
+        registration_text:
+          type: string
+          example: "string"
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option'
+          example:
+            - option_id: 0
+              option_text: "string"            
+    BroadcastRegistrationResponse:
+      type: object
+      required:
+        - registration_id
+        - registration_text
+        - options
+      properties:
+        registration_id:
+          type: integer
+          example: 0
+    UpdateRegistrationResponse:
+      type: object
+      required:
+        - registration_id
+      properties:
+        registration_id:
+          type: integer
+          example: 0
+          

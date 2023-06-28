@@ -4,6 +4,7 @@ WEBHOOK_PATH = '/bot/'
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 WEBHOOK_SSL_CERT = './server/certs/fullchain1.pem'
 WEBHOOK_SSL_PRIV = './server/certs/privkey1.pem'
+API_PATH = '/api/'
 
 # webserver settings
 WEBAPP_HOST = '0.0.0.0'  # or ip
