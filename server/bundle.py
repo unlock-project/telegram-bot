@@ -5,7 +5,7 @@ import aiogram
 from aiogram.dispatcher.webhook import get_new_configured_app
 from aiohttp import web
 from aiogram.dispatcher import Dispatcher
-from .settings import WEBHOOK_PATH, WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV, WEBAPP_HOST, WEBAPP_PORT, WEBHOOK_URL
+from utils.settings import WEBHOOK_PATH, WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV, WEBAPP_HOST, WEBAPP_PORT, WEBHOOK_URL, API_PATH
 from .middleware import middleware
 
 
@@ -41,7 +41,7 @@ class AppBundle:
         app.on_startup.append(on_startup)
         app.on_shutdown.append(on_shutdown)
         # Setup API app
-        app.add_subapp('/api/', api_app)
+        app.add_subapp(API_PATH, api_app)
         # Generate SSL context
         context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
         context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)

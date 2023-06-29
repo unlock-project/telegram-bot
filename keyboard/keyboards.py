@@ -1,9 +1,11 @@
 import json
+import typing
 
 from aiogram import types
 from aiogram.types import InlineKeyboardMarkup, \
     InlineKeyboardButton
 
+import schemas
 from utils import messages
 from utils.models import User
 
@@ -34,12 +36,12 @@ def getQuestionsListKeyboard(questions):
     return questions_list
 
 
-def getRegistrationKeyboard(registration_id: int, options):
+def getRegistrationKeyboard(registration_id: int, options: typing.List[schemas.Option]):
     registration_keyboard = InlineKeyboardMarkup()
 
     for option in options:
-        data = json.dumps({"type": "registration", "id": registration_id, "option": option.get_id()})
-        registration_keyboard.add(InlineKeyboardButton(text=option.title, callback_data=data))
+        data = json.dumps({"type": "registration", "id": registration_id, "option": option.option_id})
+        registration_keyboard.add(InlineKeyboardButton(text=option.option_text, callback_data=data))
 
     return registration_keyboard
 
@@ -70,12 +72,12 @@ def getCancelKeyboard():
     return keyboard
 
 
-def getVoteKeyboard(vote_id: int, choices):
+def getVoteKeyboard(vote_id: int, options: typing.List[schemas.Option]):
     vote_keyboard = InlineKeyboardMarkup()
 
-    for choice in choices:
-        data = json.dumps({"type": "vote", "id": vote_id, "choice": choice.get_id()})
-        vote_keyboard.add(InlineKeyboardButton(text=choice.name, callback_data=data))
+    for option in options:
+        data = json.dumps({"type": "vote", "id": vote_id, "option": option.option_id})
+        vote_keyboard.add(InlineKeyboardButton(text=option.option_text, callback_data=data))
 
     return vote_keyboard
 

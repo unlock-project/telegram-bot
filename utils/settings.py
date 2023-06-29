@@ -1,3 +1,11 @@
+# telegram
+import os
+
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+SUPER_ADMIN = int(os.getenv('SUPER_ADMIN'))
+CHANNEL_ID = int(os.getenv('CHANNEL_ID'))
+# Unlock api
+UNLOCK_API_URL = 'https://cw65021-django-wvkb6.tw1.ru/'
 # webhook settings
 WEBHOOK_HOST = 'https://unlock.sumjest.ru'
 WEBHOOK_PATH = '/bot/'

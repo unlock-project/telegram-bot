@@ -4,7 +4,7 @@ import traceback
 
 from utils import objects
 from utils.objects import *
-from utils.models import Vote, Choice, Question, Registration, Promocode, Option
+from utils.models import Vote, Registration
 
 
 class UnlockAPI:
@@ -16,10 +16,13 @@ class UnlockAPI:
     async def _get(self, function: str, params=None):
         if params is None:
             params = {}
-        async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
-            async with session.get(
-                    self.url + function, params=params) as resp:
-                data = await resp.text()
+        try:
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
+                async with session.get(
+                        self.url + function, params=params) as resp:
+                    data = await resp.text()
+        except:
+            return None
 
         try:
             json_data = json.loads(data)
@@ -52,6 +55,8 @@ class UnlockAPI:
 
     async def getScore(self, id: int):
         data = await self._get("score", {"id": id})
+        if 'data' not in data:
+            return None
         return data['data']['score']
 
     async def getDaily(self, id: int):

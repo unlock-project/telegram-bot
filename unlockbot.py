@@ -1,7 +1,7 @@
 import datetime
 import logging
 
-from handlers import callback_handler, message_handler  # noqa: F401
+from handlers import callback_handler, message_handler, event_handler  # noqa: F401
 from instances import bot, dp, app
 from server.routes import routes
 from utils.my_filters import IsAdmin
@@ -19,3 +19,4 @@ logging.basicConfig(
 
 if __name__ == "__main__":
     app.run(bot, dp, routes)
+

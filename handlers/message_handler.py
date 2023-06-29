@@ -11,7 +11,7 @@ from instances import dp, bot, unlock_api
 from states import UserState
 from utils import models, messages
 import keyboard as km
-from utils.models import Promocode, Vote, Registration, Question
+from utils.models import Vote, Registration
 from utils.my_filters import IsAdmin
 from utils.qr import generate_and_save
 

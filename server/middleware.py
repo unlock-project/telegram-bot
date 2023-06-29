@@ -7,7 +7,7 @@ from aiohttp.web import middleware
 from pydantic import BaseModel
 
 from schemas import ErrorResponse
-from .settings import API_PATH
+from utils.settings import API_PATH
 
 
 @middleware
@@ -27,7 +27,6 @@ async def middleware(request: aiohttp.web.Request, handler):
         return aiohttp.web.json_response(ErrorResponse(reason='Bad json data').dict())
     try:
         validated = data_class(**data)
-        print(validated)
     except:
         logging.error(traceback.format_exc())
         return aiohttp.web.json_response(ErrorResponse(reason='Bad request').dict())

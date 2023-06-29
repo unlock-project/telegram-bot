@@ -4,10 +4,10 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 
 import services
-from instances import dp, bot, unlock_api
+from instances import dp, bot
 from states import UserState
-from utils import models, messages
-from utils.models import Vote, Registration, Question, Option, Choice
+from utils import messages
+from utils.models import Vote, Registration, User
 from utils.my_filters import CallbackType
 
 
@@ -15,22 +15,30 @@ from utils.my_filters import CallbackType
 async def make_choice_event(callback: types.CallbackQuery):
     chat_id = callback.from_user.id
     data = json.loads(callback.data)
-    choice = Choice.get_by_id(data['choice'])
+    vote = Vote.get_or_none(Vote.vote_id == data['id'])
+    if vote is None:
+        await bot.answer_callback_query(callback.id, 'Произошла ошибка, попробуйте позже')
+        # ERROR
+    option = await services.get_option_by_id(vote.options, data['option'])
+    if option is None:
+        await bot.answer_callback_query(callback.id, 'Произошла ошибка, попробуйте позже')
+        # ERROR
     try:
-        user = models.User.get(chat_id=chat_id)
+        user = User.get(chat_id=chat_id)
     except:
         await bot.send_message(chat_id, messages.not_met)
         return
-    data = await unlock_api.sendVoteChoice(user.id, choice.vote.id, choice.name)
-
-    if data["success"]:
-        await bot.edit_message_text(callback.message.text + f"\n\n {messages.voted.format(choice=choice.name)}",
-                                    chat_id,
-                                    callback.message.message_id)
-    else:
-        await bot.send_message(chat_id, data["msg"])
-        await callback.answer()
-    return
+    # data = await unlock_api.sendVoteChoice(user.id, choice.vote.id, choice.name)
+    #
+    # if data["success"]:
+    #     await bot.edit_message_text(callback.message.text + f"\n\n {messages.voted.format(choice=choice.name)}",
+    #                                 chat_id,
+    #                                 callback.message.message_id)
+    # else:
+    #     await bot.send_message(chat_id, data["msg"])
+    #     await callback.answer()
+    # return
+    await bot.answer_callback_query(callback.id, f'Вы проголосвали за {option["option_text"]}', show_alert=True)
 
 
 @dp.callback_query_handler(CallbackType("vote_select"))
@@ -54,7 +62,7 @@ async def vote_select_event(callback: types.CallbackQuery):
         await bot.send_message(chat_id, messages.data_not_found_message)
         return
 
-    await services.start_voting(bot, vote_model.id, vote_model.title, choices_select)
+    await services.start_voting(bot, vote_model.id, vote_model.title)
 
 
 @dp.callback_query_handler(CallbackType("question_select"))
@@ -124,22 +132,29 @@ async def answer_button_event(callback: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(CallbackType("registration"))
 async def make_choice_event(callback: types.CallbackQuery):
+
     chat_id = callback.from_user.id
     data = json.loads(callback.data)
-    option = Option.get_by_id(data['option'])
+    registration = Registration.get_or_none(Registration.registration_id == data['id'])
+    if registration is None:
+        await bot.answer_callback_query(callback.id, 'Произошла ошибка, попробуйте позже')
+        # ERROR
+    option = await services.get_option_by_id(registration.options, data['option'])
+    if option is None:
+        await bot.answer_callback_query(callback.id, 'Произошла ошибка, попробуйте позже')
+        # ERROR
     try:
-        user = models.User.get(chat_id=chat_id)
+        user = User.get(chat_id=chat_id)
     except:
         await bot.send_message(chat_id, messages.not_met)
         return
     # await bot.edit_message_text(callback.message.text + f"\n\n {messages.voted.format(option=option.title)}", chat_id,
     #                             callback.message.message_id)
 
-    data = await unlock_api.sendRegistration(user.id, option.registration.id, option.title)
-    await bot.send_message(chat_id, data["msg"])
-    if not data["success"]:
-        await callback.answer()
-    else:
-        await callback.message.delete()
-
-    return
+    # data = await unlock_api.sendRegistration(user.id, option.registration.id, option.title)
+    # await bot.send_message(chat_id, data["msg"])
+    # if not data["success"]:
+    #     await callback.answer()
+    # else:
+    #     await callback.message.delete()
+    await bot.answer_callback_query(callback.id, f'Вы зарегистрировались на {option["option_text"]}', show_alert=True)
