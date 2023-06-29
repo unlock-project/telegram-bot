@@ -1,7 +1,8 @@
 from peewee import *
 from playhouse.postgres_ext import JSONField
+from utils.settings import DB_USER, DB_HOST, DB_NAME, DB_PASS, DB_PORT
 
-db = PostgresqlDatabase('unlockbot', host='localhost', port=5432, user='postgres', password='postgres')
+db = PostgresqlDatabase(DB_NAME, host=DB_HOST, port=DB_PORT, user=DB_USER, password=DB_PASS)
 
 
 class BaseModel(Model):
@@ -64,4 +65,3 @@ class Registration(BaseModel):
 
 
 db.connect()
-db.create_tables([User, Vote, Registration])
