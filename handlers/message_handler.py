@@ -14,6 +14,7 @@ import keyboard as km
 from utils.models import Vote, Registration
 from utils.my_filters import IsAdmin
 from utils.qr import generate_and_save
+from utils.settings import SUPER_ADMIN
 
 
 @dp.message_handler(commands="start")
@@ -67,7 +68,7 @@ async def qr_generate(message: types.Message):
 @dp.message_handler(IsAdmin(), commands="admin")
 async def clear_keyboard(message: types.Message):
     chat_id = message.chat.id
-    if chat_id != 1074893653 and chat_id != 313961073:
+    if chat_id != SUPER_ADMIN:
         return
 
     try:
@@ -77,6 +78,11 @@ async def clear_keyboard(message: types.Message):
         user.save()
     except:
         logging.error(traceback.format_exc())
+
+
+@dp.message_handler(IsAdmin(), commands="webapp")
+async def webapp_keyboard(message: types.Message):
+    await bot.send_message(message.chat.id, "Hello", reply_markup=km.getWebAppKeyboard())
 
 
 @dp.message_handler(state=UserState.answering_question)

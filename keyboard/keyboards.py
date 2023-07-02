@@ -3,11 +3,17 @@ import typing
 
 from aiogram import types
 from aiogram.types import InlineKeyboardMarkup, \
-    InlineKeyboardButton
+    InlineKeyboardButton, WebAppInfo, ReplyKeyboardMarkup, KeyboardButton
 
 import schemas
 from utils import messages
 from utils.models import User
+
+
+def getWebAppKeyboard():
+    kb = InlineKeyboardMarkup()
+    kb.add(InlineKeyboardButton("Перейти", web_app=WebAppInfo(url='https://cdm.sumjest.ru/api/bot/qrscanner/')))
+    return kb
 
 
 def getVotesListKeyboard(votes):

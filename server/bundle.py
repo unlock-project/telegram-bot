@@ -47,3 +47,4 @@ class AppBundle:
         context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
         # Start web-application.
         web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT, ssl_context=context)
+        # web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT)
