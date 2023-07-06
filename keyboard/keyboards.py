@@ -12,7 +12,7 @@ from utils.models import User
 
 def getWebAppKeyboard():
     kb = InlineKeyboardMarkup()
-    kb.add(InlineKeyboardButton("Перейти", web_app=WebAppInfo(url='https://cdm.sumjest.ru/api/bot/qrscanner/')))
+    kb.add(InlineKeyboardButton("Перейти", web_app=WebAppInfo(url='https://cdm.sumjest.ru/bot/scanner')))
     return kb
 
 

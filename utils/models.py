@@ -11,7 +11,7 @@ class BaseModel(Model):
 
 
 class User(BaseModel):
-    chat_id = IntegerField(null=False, primary_key=True)
+    chat_id = BigIntegerField(null=False, primary_key=True)
     id = IntegerField(null=False)
     is_admin = BooleanField(default=False)
     admin_mode = BooleanField(default=False)

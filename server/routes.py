@@ -87,9 +87,9 @@ async def getUserID(request: web.Request, chat_id: int):
 
 
 @routes.get('/user/validate')
-async def validateUser(request: web.Request, _auth: str):
+async def validateUser(request: web.Request, auth: str):
     try:
-        result = await services.validate_user(_auth)
+        result = await services.validate_user(auth)
     except Exception as ex:
         return ErrorResponse(reason=ex.args)
     return UserValidateResponse(**result)

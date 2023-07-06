@@ -19,11 +19,11 @@ async def make_choice_event(callback: types.CallbackQuery):
     vote = Vote.get_or_none(Vote.vote_id == data['id'])
     if vote is None:
         await bot.answer_callback_query(callback.id, 'Произошла ошибка, попробуйте позже')
-        # ERROR
+        raise Exception("Bad callback data")
     option = await services.get_option_by_id(vote.options, data['option'])
     if option is None:
         await bot.answer_callback_query(callback.id, 'Произошла ошибка, попробуйте позже')
-        # ERROR
+        raise Exception("Bad callback data")
     try:
         user = User.get(chat_id=chat_id)
     except:
@@ -40,75 +40,6 @@ async def make_choice_event(callback: types.CallbackQuery):
     #     await callback.answer()
     # return
     await bot.answer_callback_query(callback.id, f'Вы проголосвали за {option["option_text"]}', show_alert=True)
-
-
-@dp.callback_query_handler(CallbackType("vote_select"))
-async def vote_select_event(callback: types.CallbackQuery):
-    chat_id = callback.from_user.id
-
-    data = json.loads(callback.data)
-    await callback.message.delete()
-    vote_id = data["id"]
-    if vote_id == -1:
-        return
-    votes_list = Vote.select().where(Vote.id == vote_id)
-
-    if not len(votes_list):
-        await bot.send_message(chat_id, messages.data_not_found_message)
-        return
-
-    vote_model: Vote = votes_list[0]
-    choices_select = Choice.select().where(Choice.vote == vote_model)
-    if not len(choices_select):
-        await bot.send_message(chat_id, messages.data_not_found_message)
-        return
-
-    await services.start_voting(bot, vote_model.id, vote_model.title)
-
-
-@dp.callback_query_handler(CallbackType("question_select"))
-async def question_select_event(callback: types.CallbackQuery):
-    chat_id = callback.from_user.id
-
-    data = json.loads(callback.data)
-    await callback.message.delete()
-    question_id = data["id"]
-    if question_id == -1:
-        return
-    questions_list = Question.select().where(Question.id == question_id)
-
-    if not len(questions_list):
-        await bot.send_message(chat_id, messages.data_not_found_message)
-        return
-
-    question_model: Question = questions_list[0]
-
-    await services.start_question(bot, question_model.id)
-
-
-@dp.callback_query_handler(CallbackType("registration_select"))
-async def registration_select_event(callback: types.CallbackQuery):
-    chat_id = callback.from_user.id
-
-    data = json.loads(callback.data)
-    await callback.message.delete()
-    registration_id = data["id"]
-    if registration_id == -1:
-        return
-    registrations_list = Registration.select().where(Registration.id == registration_id)
-
-    if not len(registrations_list):
-        await bot.send_message(chat_id, messages.data_not_found_message)
-        return
-
-    registration_model: Registration = registrations_list[0]
-
-    options_select = Option.select().where(Option.registration == registration_model)
-    if not len(options_select):
-        await bot.send_message(chat_id, messages.data_not_found_message)
-        return
-
-    await services.start_registration(bot, registration_model.id, registration_model.text, options_select)
 
 
 @dp.callback_query_handler(CallbackType("answer"))
@@ -133,7 +64,6 @@ async def answer_button_event(callback: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(CallbackType("registration"))
 async def make_choice_event(callback: types.CallbackQuery):
-
     chat_id = callback.from_user.id
     data = json.loads(callback.data)
     registration = Registration.get_or_none(Registration.registration_id == data['id'])

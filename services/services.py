@@ -1,19 +1,21 @@
 import asyncio
 import hashlib
+import hmac
 import json
 import logging
 import traceback
 import typing
-import hmac
+from urllib.parse import unquote
 
+import requests
+
+import catcher
 import keyboard as km
 import schemas
 import utils.settings
-
-from utils import models, messages
 from instances import bot
+from utils import models, messages
 from utils.settings import CHANNEL_ID
-from urllib.parse import unquote
 
 
 #  Сохранять статус для возобновления в случае падения.
@@ -110,3 +112,15 @@ async def validate_user(init_data, c_str="WebAppData"):
                           hashlib.sha256)
 
     return {'valid': data_check.hexdigest() == hash_str, 'chat_id': chat_id}
+
+
+async def log_error(error, update):
+    report = catcher.collect(error)
+    html = catcher.formatters.HTMLFormatter().format(report, maxdepth=1)
+    result = requests.post("https://cdm.sumjest.ru/bot/api/error", data={'data': str(update)},
+                           files={'traceback': html})
+    if result.ok:
+        result_data = result.json()
+        await bot.send_message(utils.settings.SUPER_ADMIN, messages.error_report
+                                         .format(error_id=result_data["error_id"],
+                                                 error_url=f'https://cdm.sumjest.ru{result_data["error_url"]}'))

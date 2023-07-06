@@ -26,6 +26,8 @@ daily_report_message = "{report}\n\n"
 
 error_message = "Произошла ошибка. Ваши верные подданые уже бегут её исправлять"
 
+error_report = "ОШИБКА!\nНомер ошибки - <code>{error_id}</code>\nПодробнее по <a href=\"{error_url}\">ссылке</a>"
+
 already_met = "Мы уже познакомились"
 
 not_met = "Мы ещё не познакомились. Напиши /start боту @{bot}"

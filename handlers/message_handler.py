@@ -6,12 +6,11 @@ import peewee
 from aiogram import types
 from aiogram.dispatcher import FSMContext, filters
 
+import keyboard as km
 import services
 from instances import dp, bot, unlock_api
 from states import UserState
 from utils import models, messages
-import keyboard as km
-from utils.models import Vote, Registration
 from utils.my_filters import IsAdmin
 from utils.qr import generate_and_save
 from utils.settings import SUPER_ADMIN
@@ -53,6 +52,12 @@ async def start(message: types.Message):
 async def clear_keyboard(message: types.Message):
     await bot.send_message(chat_id=message.chat.id, text=messages.cleared_message,
                            reply_markup=types.reply_keyboard.ReplyKeyboardRemove())
+
+
+@dp.message_handler(IsAdmin(), commands="raise")
+async def raise_error(message: types.Message):
+    args = message.get_args()
+    raise Exception(args)
 
 
 @dp.message_handler(IsAdmin(), commands="qr")
@@ -126,7 +131,7 @@ async def promocode_enter(message: types.Message, state: FSMContext):
 async def broadcast_message(message: types.Message, state: FSMContext):
     text_to_broadcast = message.text
     await state.finish()
-    await services.broadcast(bot, text_to_broadcast)
+    await services.broadcast(text_to_broadcast)
 
 
 @dp.message_handler(filters.Text(equals=messages.score_request))
@@ -157,12 +162,6 @@ async def daily_report(message: types.Message):
     daily_score = data["daily_score"]
     await bot.send_message(chat_id, messages.daily_report_message.format(report=msg,
                                                                          daily_score=daily_score))
-
-
-@dp.message_handler(filters.Text(equals=messages.promocode))
-async def promocode_button(message: types.Message, state: FSMContext):
-    await bot.send_message(message.chat.id, messages.enter_promocode_message)
-    await UserState.entering_promocode.set()
 
 
 @dp.message_handler(IsAdmin(), filters.Text(equals=messages.turn_on_admin))
@@ -210,49 +209,3 @@ async def back_button(message: types.Message):
         return
     await bot.send_message(message.chat.id, messages.ok_message,
                            reply_markup=km.getMainKeyboard(user))
-
-
-@dp.message_handler(IsAdmin(), filters.Text(equals=messages.update_db))
-async def update_db(message: types.Message):
-    result = await unlock_api.update_db()
-    if result:
-        await bot.send_message(message.chat.id, messages.updated_message)
-    else:
-        await bot.send_message(message.chat.id, messages.error_message)
-
-
-@dp.message_handler(IsAdmin(), filters.Text(equals=messages.votes))
-async def votes_list(message: types.Message):
-    votes_list = Vote.select().where(Vote.date == datetime.datetime.now().strftime("%Y-%m-%d")).order_by(Vote.time)
-    if not len(votes_list):
-        await bot.send_message(message.chat.id, messages.data_not_found_message)
-        return
-
-    await bot.send_message(message.chat.id, messages.choose_what_to_send_message,
-                           reply_markup=km.getVotesListKeyboard(votes_list))
-
-
-@dp.message_handler(IsAdmin(), filters.Text(equals=messages.registrations))
-async def registrations_list(message: types.Message):
-    registrations_list = (Registration.select()
-                          .where(Registration.date == datetime.datetime.now().strftime("%Y-%m-%d"))
-                          .order_by(Registration.time))
-    if not len(registrations_list):
-        await bot.send_message(message.chat.id, messages.data_not_found_message)
-        return
-
-    await bot.send_message(message.chat.id, messages.choose_what_to_send_message,
-                           reply_markup=km.getRegistrationsKeyboard(registrations_list))
-
-
-@dp.message_handler(IsAdmin(), filters.Text(equals=messages.questions))
-async def questions_list(message: types.Message):
-    questions_list = (Question.select()
-                      .where(Question.date == datetime.datetime.now().strftime("%Y-%m-%d"))
-                      .order_by(Question.time))
-    if not len(questions_list):
-        await bot.send_message(message.chat.id, messages.data_not_found_message)
-        return
-
-    await bot.send_message(message.chat.id, messages.choose_what_to_send_message,
-                           reply_markup=km.getQuestionsListKeyboard(questions_list))
