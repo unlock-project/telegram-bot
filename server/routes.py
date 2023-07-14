@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import traceback
 
@@ -14,7 +15,8 @@ routes = web.RouteTableDef()
 
 @routes.post('/message/publish')
 async def apiMessage(request: web.Request, data: BroadcastMessageRequest):
-    await broadcast(data.message_text)
+    asyncio.get_running_loop().create_task(broadcast(data.message_text))\
+        .add_done_callback(services.services.task_done_callback)
     return BroadcastMessageResponse(message_id=data.message_id)
 
 
@@ -38,7 +40,8 @@ async def apiVote(request: web.Request, data: BroadcastVoteRequest):
 
 @routes.post('/question/publish')
 async def apiQuestion(request: web.Request, data: BroadcastQuestionRequest):
-    await start_question(data.question_text, data.question_id)
+    asyncio.get_running_loop().create_task(start_question(data.question_text, data.question_id)) \
+        .add_done_callback(services.services.task_done_callback)
     return BroadcastQuestionResponse(question_id=data.question_id)
 
 

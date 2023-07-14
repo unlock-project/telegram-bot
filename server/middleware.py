@@ -33,7 +33,10 @@ async def middleware(request: aiohttp.web.Request, handler):
         except:
             logging.error(traceback.format_exc())
             return aiohttp.web.json_response(ErrorResponse(reason='Bad request').dict())
-        resp = await handler(request, validated)
+        try:
+            resp = await handler(request, validated)
+        except Exception as ex:
+            return aiohttp.web.json_response(ErrorResponse(reason=f'{type(ex).__name__}: {str(ex)}').dict())
         if not issubclass(type(resp), BaseModel):
             logging.error('API response is not a pydantic class')
             return aiohttp.web.json_response({}, status=500)
@@ -45,9 +48,9 @@ async def middleware(request: aiohttp.web.Request, handler):
                 logging.error('API response is not a pydantic class')
                 return aiohttp.web.json_response({}, status=500)
             return aiohttp.web.json_response(resp.dict())
-        except:
+        except Exception as ex:
             logging.error(traceback.format_exc())
-            return aiohttp.web.json_response(ErrorResponse(reason="Bad request").dict())
+            return aiohttp.web.json_response(ErrorResponse(reason=f"{type(ex).__name__}: {str(ex)}").dict())
     else:
         return await handler(request)
 

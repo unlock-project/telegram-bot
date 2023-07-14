@@ -7,6 +7,7 @@ import traceback
 import typing
 from urllib.parse import unquote
 
+import aiogram.utils.exceptions
 import requests
 
 import catcher
@@ -18,16 +19,33 @@ from utils import models, messages
 from utils.settings import CHANNEL_ID
 
 
-#  Сохранять статус для возобновления в случае падения.
+class InTaskException(Exception):
+    original: Exception
+    payload: dict
+
+    def __init__(self, original: Exception, payload: dict):
+        self.original = original
+        self.payload = payload
+
+
 async def broadcast(message_text: str):
     users = models.User.select()
     for user in users:
-        await asyncio.sleep(0.040)  # not more than 30 per second (25)
-        try:
-            await bot.send_message(user.chat_id, message_text, reply_markup=km.getMainKeyboard(user))
-        except:
-            logging.error(traceback.format_exc())
-            logging.error(user.id)
+
+        successful = False
+        while not successful:
+            await asyncio.sleep(0.040)  # not more than 30 per second (25)
+            successful = True
+            try:
+                await bot.send_message(user.chat_id, message_text,
+                                       reply_markup=km.getMainKeyboard(user))
+            except aiogram.utils.exceptions.RetryAfter as exception:
+                logging.warning(f"Flood control exceeded. Waiting {exception.timeout}")
+                await asyncio.sleep(exception.timeout)
+                successful = False
+            except Exception as ex:
+                logging.error(traceback.format_exc())
+                logging.error(user.id)
 
 
 async def start_voting(vote_id: int, vote_text: str, options: typing.List[schemas.Option]) -> int:
@@ -43,20 +61,26 @@ async def start_voting(vote_id: int, vote_text: str, options: typing.List[schema
 
 async def start_question(question_text: str, question_id: int):
     users = models.User.select()
-
     for user in users:
-        await asyncio.sleep(0.040)  # not more than 30 per second (25)
-        try:
-            await bot.send_message(user.chat_id, question_text,
-                                   reply_markup=km.getAnswerKeyboard(question_id))
-        except:
-            logging.error(traceback.format_exc())
-            logging.error(user.id)
+
+        successful = False
+        while not successful:
+            await asyncio.sleep(0.040)  # not more than 30 per second (25)
+            successful = True
+            try:
+                await bot.send_message(user.chat_id, question_text,
+                                       reply_markup=km.getAnswerKeyboard(question_id))
+            except aiogram.utils.exceptions.RetryAfter as exception:
+                logging.warning(f"Flood control exceeded. Waiting {exception.timeout}")
+                await asyncio.sleep(exception.timeout)
+                successful = False
+            except Exception as ex:
+                logging.error(traceback.format_exc())
+                logging.error(user.id)
 
 
 async def start_registration(registration_id: int, registration_text: str, options) -> int:
     keyboard = km.getRegistrationKeyboard(registration_id, options)
-
     try:
         result = await bot.send_message(CHANNEL_ID, registration_text, reply_markup=keyboard)
         return result.message_id
@@ -122,5 +146,18 @@ async def log_error(error, update):
     if result.ok:
         result_data = result.json()
         await bot.send_message(utils.settings.SUPER_ADMIN, messages.error_report
-                                         .format(error_id=result_data["error_id"],
-                                                 error_url=f'https://cdm.sumjest.ru{result_data["error_url"]}'))
+                               .format(error_id=result_data["error_id"],
+                                       error_url=f'https://cdm.sumjest.ru{result_data["error_url"]}'))
+
+
+def task_done_callback(task: asyncio.Task):
+    exception = task.exception()
+    if exception is not None:
+
+        if isinstance(exception, InTaskException):
+            payload = exception.payload
+            f_ex = exception.original
+        else:
+            f_ex = exception
+            payload = {"from": "task"}
+        asyncio.get_running_loop().create_task(log_error(f_ex, payload))

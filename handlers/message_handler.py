@@ -100,31 +100,31 @@ async def answer_question(message: types.Message, state: FSMContext):
     await bot.send_message(message.chat.id, data["msg"])
 
 
-@dp.message_handler(state=UserState.entering_promocode)
-async def promocode_enter(message: types.Message, state: FSMContext):
-    promocode = message.text
-    chat_id = message.chat.id
-    await state.finish()
-    promocode_models = Promocode.select().where((Promocode.date == datetime.datetime.now().date().strftime("%Y-%m-%d")),
-                                                (peewee.fn.LOWER(Promocode.code) == promocode.lower()))
-    if not len(promocode_models):
-        await bot.send_message(chat_id, messages.promocode_not_found_message)
-        return
-    user = models.User.get((models.User.chat_id == chat_id))
-    promocode_model: Promocode = promocode_models[0]
-    text = promocode_model.answer
-    photo = promocode_model.photo
-
-    data = await unlock_api.sendPromocode(user.id, promocode_model.id)
-    if data["success"]:
-        if text is not None:
-            await bot.send_message(chat_id, text)
-        if photo is not None:
-            await bot.send_photo(chat_id, photo)
-
-
-    else:
-        await bot.send_message(chat_id, data["msg"])
+# @dp.message_handler(state=UserState.entering_promocode)
+# async def promocode_enter(message: types.Message, state: FSMContext):
+#     promocode = message.text
+#     chat_id = message.chat.id
+#     await state.finish()
+#     promocode_models = Promocode.select().where((Promocode.date == datetime.datetime.now().date().strftime("%Y-%m-%d")),
+#                                                 (peewee.fn.LOWER(Promocode.code) == promocode.lower()))
+#     if not len(promocode_models):
+#         await bot.send_message(chat_id, messages.promocode_not_found_message)
+#         return
+#     user = models.User.get((models.User.chat_id == chat_id))
+#     promocode_model: Promocode = promocode_models[0]
+#     text = promocode_model.answer
+#     photo = promocode_model.photo
+#
+#     data = await unlock_api.sendPromocode(user.id, promocode_model.id)
+#     if data["success"]:
+#         if text is not None:
+#             await bot.send_message(chat_id, text)
+#         if photo is not None:
+#             await bot.send_photo(chat_id, photo)
+#
+#
+#     else:
+#         await bot.send_message(chat_id, data["msg"])
 
 
 @dp.message_handler(IsAdmin(), state=UserState.admin_broadcast)

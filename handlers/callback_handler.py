@@ -42,24 +42,24 @@ async def make_choice_event(callback: types.CallbackQuery):
     await bot.answer_callback_query(callback.id, f'Вы проголосвали за {option["option_text"]}', show_alert=True)
 
 
-@dp.callback_query_handler(CallbackType("answer"))
-async def answer_button_event(callback: types.CallbackQuery, state: FSMContext):
-    chat_id = callback.from_user.id
-    data = json.loads(callback.data)
-    await callback.message.delete()
-    questions_list = Question.select().where(Question.id == data["id"])
-
-    if not len(questions_list):
-        await bot.send_message(chat_id, messages.data_not_found_message)
-        return
-
-    question_model: Question = questions_list[0]
-
-    await bot.send_message(chat_id, messages.question_message.format(question=question_model.text))
-
-    await UserState.answering_question.set()
-    await state.update_data({"question_id": question_model.id})
-    return
+# @dp.callback_query_handler(CallbackType("answer"))
+# async def answer_button_event(callback: types.CallbackQuery, state: FSMContext):
+#     chat_id = callback.from_user.id
+#     data = json.loads(callback.data)
+#     await callback.message.delete()
+#     questions_list = Question.select().where(Question.id == data["id"])
+#
+#     if not len(questions_list):
+#         await bot.send_message(chat_id, messages.data_not_found_message)
+#         return
+#
+#     question_model: Question = questions_list[0]
+#
+#     await bot.send_message(chat_id, messages.question_message.format(question=question_model.text))
+#
+#     await UserState.answering_question.set()
+#     await state.update_data({"question_id": question_model.id})
+#     return
 
 
 @dp.callback_query_handler(CallbackType("registration"))

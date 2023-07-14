@@ -39,7 +39,8 @@ def collect(exception):
     else:
         exc_info = sys.exc_info()
         tb = exc_info[2]
-
+    if tb is None and hasattr(exception, "__traceback__"):
+        tb = exception.__traceback__
     while tb:
         frame = tb.tb_frame
         traceback.append(__collect_frame(frame, tb.tb_lineno))
