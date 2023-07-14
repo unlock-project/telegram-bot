@@ -71,6 +71,7 @@ class APIQuestion:
         data['time'] = self.time.timestamp()
         return data
 
+
 class APIPromocode:
     id: int
     title: str
@@ -92,6 +93,7 @@ class APIPromocode:
         data['time'] = self.time.timestamp()
         return data
 
+
 class APIRegistrationOption:
     title: str
     count: int
@@ -104,6 +106,7 @@ class APIRegistrationOption:
 
     def __to_dict(self):
         return self.__dict__
+
 
 class APIRegistration:
     id: int
