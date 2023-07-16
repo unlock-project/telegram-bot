@@ -23,45 +23,12 @@ class Vote(BaseModel):
     options = JSONField()
     message_id = IntegerField()
 
-#
-#
-# class Choice(BaseModel):
-#     name = TextField()
-#     vote = ForeignKeyField(Vote)
-#
-#
-# class Question(BaseModel):
-#     id = IntegerField(primary_key=True)
-#     title = TextField(null=True)
-#     text = TextField()
-#     date = DateField()
-#     time = TimeField()
 
-
-#
-#
-# class Promocode(BaseModel):
-#     id = IntegerField(primary_key=True)
-#     title = TextField(null=True)
-#     code = TextField()
-#     answer = TextField(null=True)
-#     photo = TextField(null=True)
-#     date = DateField()
-#     time = TimeField()
-#
-#
 class Registration(BaseModel):
     registration_id = IntegerField(primary_key=True)
     registration_text = TextField(null=True)
     options = JSONField()
     message_id = IntegerField()
-
-#
-# class Option(BaseModel):
-#     title = TextField()
-#     registration = ForeignKeyField(Registration)
-#     count = IntegerField()
-#     max = IntegerField(null=True)
 
 
 db.connect()

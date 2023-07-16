@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 import traceback
 
 from aiohttp import web
@@ -8,6 +9,7 @@ import services
 import utils.models
 from schemas import *
 from utils.models import Vote, Registration
+from utils.settings import LOGS_PATH
 from services import start_registration, start_voting, broadcast, start_question, edit_registration
 
 routes = web.RouteTableDef()
@@ -15,7 +17,7 @@ routes = web.RouteTableDef()
 
 @routes.post('/message/publish')
 async def apiMessage(request: web.Request, data: BroadcastMessageRequest):
-    asyncio.get_running_loop().create_task(broadcast(data.message_text))\
+    asyncio.get_running_loop().create_task(broadcast(data.message_text)) \
         .add_done_callback(services.services.task_done_callback)
     return BroadcastMessageResponse(message_id=data.message_id)
 
@@ -96,3 +98,16 @@ async def validateUser(request: web.Request, auth: str):
     except Exception as ex:
         return ErrorResponse(reason=ex.args)
     return UserValidateResponse(**result)
+
+
+@routes.get('/logs')
+async def logs(request: web.Request):
+    return LogsResponse(logs=list(map(lambda x: '.'.join(x.split('.')[:-1]), os.listdir(BASE_DIR / 'logs'))))
+
+@routes.get('/logs/{filename}')
+async def log(request: web.Request, filename: str):
+    log_path = LOGS_PATH / f"{filename}.log"
+    if not os.path.exists(log_path):
+        return ErrorResponse(reason="File not found")
+
+    return web.FileResponse(path=log_path)
