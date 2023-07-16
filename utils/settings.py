@@ -1,12 +1,14 @@
 import os
+from pathlib import Path
 
 # telegram
-from pathlib import Path
+
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 SUPER_ADMIN = int(os.getenv('SUPER_ADMIN'))
 CHANNEL_ID = int(os.getenv('CHANNEL_ID'))
 BOT_USERNAME = 'lkunlock_bot'
+SKIP_UPDATES = bool(int(os.getenv('SKIP_UPDATES')))
 # Unlock api
 UNLOCK_API_URL = 'https://cdm.sumjest.ru/'
 # webhook settings

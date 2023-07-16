@@ -78,3 +78,6 @@ class UnlockAPI:
         data = await self._post("bot/answer/", {"id": user_id, "function_id": code_id, "type": 1})
         return data
         pass
+
+    async def close(self):
+        await self.__session.close()

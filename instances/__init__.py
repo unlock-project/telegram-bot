@@ -10,3 +10,5 @@ storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 unlock_api = UnlockAPI(UNLOCK_API_URL)
 app = AppBundle()
+
+__all__ = ['bot', 'storage', 'dp', 'unlock_api', 'app']
