@@ -45,6 +45,8 @@ async def middleware(request: aiohttp.web.Request, handler):
         try:
             resp = await handler(request, **request.query, **dict(request.match_info))
             if issubclass(type(resp), BaseModel):
+                if isinstance(resp, ErrorResponse):
+                    return aiohttp.web.json_response(resp.dict(), status=400)
                 return aiohttp.web.json_response(resp.dict())
             elif issubclass(type(resp), FileResponse):
                 return resp

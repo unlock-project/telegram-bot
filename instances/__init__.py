@@ -3,7 +3,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from server import AppBundle
 from utils.settings import BOT_TOKEN, UNLOCK_API_URL
-from utils.unlockapi import UnlockAPI
+from unlockapi import UnlockAPI
 
 bot = Bot(token=BOT_TOKEN, parse_mode="HTML")
 storage = MemoryStorage()

@@ -7,10 +7,11 @@ from aiohttp import web
 from aiogram.dispatcher import Dispatcher
 
 import instances
+import utils.models
 from utils.settings import WEBHOOK_PATH, WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV, WEBAPP_HOST, WEBAPP_PORT, WEBHOOK_URL, \
     API_PATH, SKIP_UPDATES
 from .middleware import middleware
-
+from utils.models import db
 
 class AppBundle:
 
@@ -18,10 +19,11 @@ class AppBundle:
         pass
 
     def run(self, bot: aiogram.Bot, dp: Dispatcher, routes):
-        async def on_startup(*args, **kwargs):
+        async def on_startup(app: web.Application, *args, **kwargs):
             await bot.set_webhook(WEBHOOK_URL)
             if SKIP_UPDATES:
                 await dp.skip_updates()
+
 
         async def on_shutdown(*args, **kwargs):
             logging.warning('Shutting down..')
@@ -44,6 +46,7 @@ class AppBundle:
         api_app.middlewares.append(middleware)
         # Setup event handlers.
         app.on_startup.append(on_startup)
+        app.on_startup.append(utils.models.connect)
         app.on_shutdown.append(on_shutdown)
         # Setup API app
         app.add_subapp(API_PATH, api_app)

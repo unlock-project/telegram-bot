@@ -102,7 +102,7 @@ async def validateUser(request: web.Request, auth: str):
 
 @routes.get('/logs')
 async def logs(request: web.Request):
-    return LogsResponse(logs=list(map(lambda x: '.'.join(x.split('.')[:-1]), os.listdir(BASE_DIR / 'logs'))))
+    return LogsResponse(logs=list(map(lambda x: '.'.join(x.split('.')[:-1]), os.listdir(LOGS_PATH))))
 
 @routes.get('/logs/{filename}')
 async def log(request: web.Request, filename: str):
