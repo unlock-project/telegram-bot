@@ -1,3 +1,7 @@
+import logging
+
+import aiohttp.web
+from aiohttp.web_runner import GracefulExit
 from peewee import *
 from playhouse.postgres_ext import JSONField
 from utils.settings import DB_USER, DB_HOST, DB_NAME, DB_PASS, DB_PORT
@@ -31,4 +35,12 @@ class Registration(BaseModel):
     message_id = IntegerField()
 
 
-db.connect()
+async def connect(app: aiohttp.web.Application):
+    try:
+        db.connect()
+    except Exception as ex:
+        logging.critical(str(ex))
+
+async def cleanup(app: aiohttp.web.Application):
+    db.close()
+    logging.info("DB connection closed")
