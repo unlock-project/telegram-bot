@@ -3,41 +3,33 @@
     <head>
         <meta charset="utf-8">
         <title>Error report</title>
-
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
-
         <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
         <style>
             a {
                 cursor: pointer;
             }
-
             .codebox {
                 font-family: monospace;
             }
-
             .codebox .line.current {
                 background: rgba(0,0,255,.1);
             }
-
             .codebox .lineno {
                 text-align: right;
                 display: inline-block;
                 width: 100px;
                 opacity: .5;
             }
-
             .codebox .code {
                 white-space: pre;
             }
-
             .object-link {
                 font-family: monospace;
                 white-space: pre;
             }
-			
 			.container {
 				margin-left: 20px;
 			
@@ -103,7 +95,6 @@
             % endif
         % endif
     </%def>
-
     <body>
         <div class="container">
             <h3>Error report</h3>
@@ -111,20 +102,15 @@
                 <dt>Timestamp</dt>
                 <dd>${ datetime.fromtimestamp(report.timestamp) }</dd>
             </dl>
-
             <h3>Exception</h3>
             ${object(report.exception)}
-
             <h3>Traceback</h3>
             % for frame in report.traceback:
                 <% frameid = id() %>
                 <p>
                     <i class="icon-file"></i> <code>${ frame.file } : ${ frame.line }</code>
-
-
                     <div class="row">
                         <div class="col-lg-20">
-
                             <div class="codebox">
                                 % for index, line in enumerate(frame.code[0]):
                                     <div class="line ${'current' if frame.code[1] + index == frame.line else ''}">
@@ -135,7 +121,6 @@
                                     </div>
                                 % endfor
                             </div>
-
                         </div>
                         <div class="col-lg-2">
                             <a class="btn btn-default" data-toggle="collapse" data-target="#${frameid}-locals">

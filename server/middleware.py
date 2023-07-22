@@ -3,7 +3,7 @@ import logging
 import traceback
 
 import aiohttp.web
-from aiohttp.web import middleware
+from aiohttp.web import middleware, FileResponse
 from pydantic import BaseModel
 
 from schemas import ErrorResponse
@@ -43,11 +43,14 @@ async def middleware(request: aiohttp.web.Request, handler):
         return aiohttp.web.json_response(resp.dict())
     elif request.method == "GET":
         try:
-            resp = await handler(request, **request.query)
-            if not issubclass(type(resp), BaseModel):
+            resp = await handler(request, **request.query, **dict(request.match_info))
+            if issubclass(type(resp), BaseModel):
+                return aiohttp.web.json_response(resp.dict())
+            elif issubclass(type(resp), FileResponse):
+                return resp
+            else:
                 logging.error('API response is not a pydantic class')
-                return aiohttp.web.json_response({}, status=500)
-            return aiohttp.web.json_response(resp.dict())
+                return aiohttp.web.json_response(ErrorResponse(reason='Bad response').dict(), status=500)
         except Exception as ex:
             logging.error(traceback.format_exc())
             return aiohttp.web.json_response(ErrorResponse(reason=f"{type(ex).__name__}: {str(ex)}").dict())

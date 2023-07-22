@@ -8,11 +8,17 @@ from aiogram.types import InlineKeyboardMarkup, \
 import schemas
 from utils import messages
 from utils.models import User
+from utils.settings import UNLOCK_API_URL
 
 
-def getWebAppKeyboard():
+def getQRScannerKeyboard():
     kb = InlineKeyboardMarkup()
-    kb.add(InlineKeyboardButton("Перейти", web_app=WebAppInfo(url='https://cdm.sumjest.ru/bot/scanner')))
+    kb.add(InlineKeyboardButton("Перейти", web_app=WebAppInfo(url=f'{UNLOCK_API_URL}bot/scanner')))
+    return kb
+
+def getQRViewKeyboard():
+    kb = InlineKeyboardMarkup()
+    kb.add(InlineKeyboardButton("Посмотреть", web_app=WebAppInfo(url=f'{UNLOCK_API_URL}bot/qr')))
     return kb
 
 
@@ -100,6 +106,7 @@ def getMainKeyboard(user: User):
         keyboard.add(messages.turn_off_admin)
     else:
         keyboard.add(messages.score_request, messages.daily_report, messages.promocode)
+        keyboard.add(messages.qr_request)
         if user.is_admin:
             keyboard.add(messages.turn_on_admin)
     return keyboard

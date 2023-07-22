@@ -1,3 +1,4 @@
+import asyncio
 import json
 import logging
 import traceback
@@ -20,7 +21,7 @@ class MessageEncoder(json.JSONEncoder):
 async def all_handler(update: Update, error: Exception):
     logging.error(traceback.format_exc())
     try:
-        await log_error(error, update)
+        asyncio.get_running_loop().create_task(log_error(error, update))
     except:
         logging.error(traceback.format_exc())
     return True

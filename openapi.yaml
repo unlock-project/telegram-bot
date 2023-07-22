@@ -15,6 +15,8 @@ tags:
   description: Update methods
 - name: User
   description: User's methods
+- name: Log
+  description: Work with bot logs
 paths:
   /sendmessage:
     post:
@@ -70,6 +72,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /logs:
+    get:
+      tags:
+      - Log
+      summary: Log files list
+      description: Get bot log files list
+      operationId: logs
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogsResponse'
+        "400":
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /logs/{filename}:
+    get:
+      tags:
+      - Log
+      summary: Specific log file
+      description: Get specific bot log file
+      operationId: log
+      parameters:
+      - name: filename
+        in: path
+        description: Log filename
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: log-2023-07-16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+        "400":
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /user/validate:
     get:
       tags:
@@ -78,7 +130,7 @@ paths:
       description: Get validate status of user init data
       operationId: uservalidate
       parameters:
-      - name: _auth
+      - name: auth
         in: query
         description: Init data from telegram web app
         required: true
@@ -438,3 +490,15 @@ components:
         chat_id:
           type: integer
           example: 12387128
+    LogsResponse:
+      required:
+      - logs
+      type: object
+      properties:
+        logs:
+          type: array
+          example:
+          - log-2023-07-16
+          - log-2023-07-14
+          items:
+            type: string

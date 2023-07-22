@@ -28,23 +28,16 @@ async def start(message: types.Message):
     except:
         logging.info(f"User ({args}, {username if username is not None else ''}, {message.chat.id}) tries to log in")
 
-    data = await unlock_api.sendUserData(username, args)
-    logging.info(f"New user with data: {data}")
-    if "data" not in data.keys():
-        await bot.send_message(message.chat.id, messages.user_not_found)
-        return
+    user_data = await unlock_api.register_user(username)
+    logging.info(f"New user with data: {user_data}")
 
-    user_object = data["data"]
-
-    user = models.User.create(chat_id=message.chat.id, id=user_object["id"])
+    user = models.User.create(chat_id=message.chat.id, id=user_data.id, first_name=user_data.first_name,
+                              last_name=user_data.last_name)
     user.save()
-    await bot.send_message(message.chat.id, messages.welcome_message.format(name=user_object["first"]),
+    await bot.send_message(message.chat.id, messages.welcome_message.format(name=user.first_name),
                            reply_markup=km.getMainKeyboard(user))
-    if "qr" in user_object.keys() and user_object["qr"] is not None:
-        qr_data = user_object["qr"]
-        qr_file = await generate_and_save(user, qr_data)
-        await bot.send_message(message.chat.id, messages.qr_code_message)
-        await bot.send_photo(message.chat.id, photo=open(qr_file, "rb").read())
+
+    await bot.send_message(message.chat.id, messages.qr_code_view, reply_markup=km.getQRViewKeyboard())
     await bot.send_message(message.chat.id, messages.tutorial)
 
 
@@ -70,7 +63,7 @@ async def qr_generate(message: types.Message):
     await bot.send_photo(message.chat.id, photo=open(path, "rb").read())
 
 
-@dp.message_handler(IsAdmin(), commands="admin")
+@dp.message_handler(commands="admin")
 async def clear_keyboard(message: types.Message):
     chat_id = message.chat.id
     if chat_id != SUPER_ADMIN:
@@ -87,7 +80,7 @@ async def clear_keyboard(message: types.Message):
 
 @dp.message_handler(IsAdmin(), commands="webapp")
 async def webapp_keyboard(message: types.Message):
-    await bot.send_message(message.chat.id, "Hello", reply_markup=km.getWebAppKeyboard())
+    await bot.send_message(message.chat.id, "Hello", reply_markup=km.getQRScannerKeyboard())
 
 
 @dp.message_handler(state=UserState.answering_question)
@@ -163,6 +156,17 @@ async def daily_report(message: types.Message):
     await bot.send_message(chat_id, messages.daily_report_message.format(report=msg,
                                                                          daily_score=daily_score))
 
+@dp.message_handler(filters.Text(equals=messages.qr_request))
+async def qr_request(message: types.Message):
+    chat_id = message.chat.id
+
+    try:
+        user = models.User.get(chat_id=chat_id)
+    except:
+        await bot.send_message(chat_id, messages.not_met)
+        return
+
+    await bot.send_message(chat_id, messages.qr_code_view, reply_markup=km.getQRViewKeyboard())
 
 @dp.message_handler(IsAdmin(), filters.Text(equals=messages.turn_on_admin))
 async def turn_on_admin_button(message: types.Message):

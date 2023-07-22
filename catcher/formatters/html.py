@@ -9,5 +9,5 @@ _template = Template(str_template, default_filters=['decode.utf8'], input_encodi
 
 
 class HTMLFormatter:
-    def format(self, report, maxdepth=5):
+    def format(self, report, maxdepth=5) -> bytes:
         return _template.render(maxdepth=maxdepth, report=report, datetime=datetime)
