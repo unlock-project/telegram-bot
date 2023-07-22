@@ -32,7 +32,6 @@ class AppBundle:
 
         async def on_shutdown(*args, **kwargs):
             logging.warning('Shutting down..')
-            print("LOL")
             # Remove webhook (not acceptable in some cases)
             await bot.delete_webhook()
 
@@ -56,8 +55,8 @@ class AppBundle:
         # Setup API app
         app.add_subapp(API_PATH, api_app)
         # Generate SSL context
-        context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-        context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
+        # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+        # context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
         # Start web-application.
-        web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT, ssl_context=context)
-        # web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT)
+        # web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT, ssl_context=context)
+        web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT)

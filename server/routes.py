@@ -9,13 +9,19 @@ import services
 import utils.models
 from instances import bot
 from schemas import *
-from utils.models import Vote, Registration
+from utils.models import Vote, Registration, User
 from utils.settings import LOGS_PATH
 from services import start_registration, start_voting, broadcast, start_question, edit_registration
 
 routes = web.RouteTableDef()
 
-
+@routes.post('/sendmessage')
+async def sendMessage(request: web.Request, data: SendMessageRequest):
+    user = User.get_or_none(User.id==data.user_id)
+    if user is None:
+        return ErrorResponse(reason="User not found")
+    msg_id = (await bot.send_message(user.chat_id, data.message)).message_id
+    return MessageSentResponse(message=data.message, message_id = msg_id)
 @routes.post('/message/publish')
 async def apiMessage(request: web.Request, data: BroadcastMessageRequest):
     asyncio.get_running_loop().create_task(broadcast(data.message_text)) \

@@ -8,7 +8,7 @@ load_dotenv(find_dotenv())
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 SUPER_ADMIN = int(os.getenv('SUPER_ADMIN'))
 CHANNEL_ID = int(os.getenv('CHANNEL_ID'))
-BOT_USERNAME = 'lkunlock_bot'
+BOT_USERNAME = os.getenv('BOT_USERNAME')
 SKIP_UPDATES = bool(int(os.getenv('SKIP_UPDATES')))
 # Unlock api
 UNLOCK_API_URL = os.getenv('UNLOCK_API_URL')
@@ -21,7 +21,7 @@ WEBHOOK_SSL_PRIV = './server/certs/privkey.pem'
 API_PATH = '/api/'
 # webserver settings
 WEBAPP_HOST = '0.0.0.0'  # or ip
-WEBAPP_PORT = 8001
+WEBAPP_PORT = int(os.getenv('WEBAPP_PORT'))
 # Postgres settings
 DB_HOST = os.getenv('DB_HOST')
 DB_PORT = int(os.getenv('DB_PORT'))
