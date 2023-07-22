@@ -13,7 +13,7 @@ services:
       - "5432:5432"
     container_name: unlock_pgdb
   unlock-bot:
-    image: romaaaka/unlockbot:v1-dev
+    image: romaaaka/unlockbot:v1-prod
     command: "python unlockbot.py"
     ports:
       - "8001:8001"

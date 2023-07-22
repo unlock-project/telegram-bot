@@ -1,11 +1,14 @@
+import asyncio
 import datetime
 import logging
+
+import aiogram
 
 from handlers import callback_handler, message_handler, event_handler, error_handler  # noqa: F401
 from instances import bot, dp, app
 from server.routes import routes
 from utils.my_filters import IsAdmin
-from utils.settings import LOGS_PATH
+from utils.settings import LOGS_PATH, BOT_USERNAME
 
 dp.filters_factory.bind(IsAdmin)
 
@@ -18,6 +21,10 @@ logging.basicConfig(
     ]
 )
 
+async def register_bot(_bot: aiogram.Bot):
+    BOT_USERNAME = (await _bot.get_me()).username
+
 if __name__ == "__main__":
+    asyncio.run(register_bot(bot))
     app.run(bot, dp, routes)
 
