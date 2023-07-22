@@ -37,7 +37,9 @@ framework. Bot working on webhooks and have simple aiohttp web server for listen
 | `DB_PORT` | `5432` | Database port. |  
 | `DB_USER` | `postgres` | Database user. | 
 | `DB_PASS` | `postgres` | Database password. |  
-| `DB_NAME` | `unlockbot` | Database name | 
+| `DB_NAME` | `unlockbot` | Database name |
+
+
 Example development config:  
   
 ```  
