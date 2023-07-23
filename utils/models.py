@@ -43,6 +43,7 @@ async def connect(app: aiohttp.web.Application):
         db.connect()
     except Exception as ex:
         logging.critical(traceback.format_exc())
+        raise ex
     try:
         db.create_tables([User, Vote, Registration])
     except OperationalError as er:

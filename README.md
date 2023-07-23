@@ -55,7 +55,7 @@ Follow the steps below in order to set up development environment.
   
 1. Install dependencies: `pip install -r requirements.txt`.  Install `psycopg2` instead of `psycopg2-binary`, second for docker.
 2. Create `.env` at the root of the project and set required environment variables.  
-3. Run own postgresql server
+3. Run your own postgresql server
 4. Run bot `python unlockbot.py`
   
 ## Deploy  

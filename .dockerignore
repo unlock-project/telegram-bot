@@ -1,8 +1,6 @@
+dev.env
 .env
 openapi.yaml
 back.api.yaml
 /venv
 /server/certs
-/logs/*
-/qrs/*
-!/qrs/logo1.png

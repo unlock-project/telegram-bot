@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
 
-load_dotenv(find_dotenv())
+load_dotenv("dev.env")
 
 # telegram
 BOT_TOKEN = os.getenv('BOT_TOKEN')
