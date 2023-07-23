@@ -1,6 +1,7 @@
 import asyncio
 import datetime
 import logging
+import os.path
 
 import aiogram
 
@@ -11,6 +12,9 @@ from utils.my_filters import IsAdmin
 from utils.settings import LOGS_PATH, BOT_USERNAME
 
 dp.filters_factory.bind(IsAdmin)
+
+if not os.path.exists(LOGS_PATH):
+    os.mkdir(LOGS_PATH)
 
 logging.basicConfig(
     level=logging.INFO,

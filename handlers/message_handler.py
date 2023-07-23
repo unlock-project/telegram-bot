@@ -12,7 +12,6 @@ from instances import dp, bot, unlock_api
 from states import UserState
 from utils import models, messages
 from utils.my_filters import IsAdmin
-from utils.qr import generate_and_save
 from utils.settings import SUPER_ADMIN
 
 
@@ -51,16 +50,6 @@ async def clear_keyboard(message: types.Message):
 async def raise_error(message: types.Message):
     args = message.get_args()
     raise Exception(args)
-
-
-@dp.message_handler(IsAdmin(), commands="qr")
-async def qr_generate(message: types.Message):
-    args = message.get_args()
-    if not args:
-        return
-    user: models.User = models.User.get((models.User.chat_id == message.chat.id))
-    path = await generate_and_save(user, args)
-    await bot.send_photo(message.chat.id, photo=open(path, "rb").read())
 
 
 @dp.message_handler(commands="admin")
