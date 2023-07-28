@@ -1,16 +1,15 @@
 import logging
-import ssl
 
 import aiogram
+from aiogram.dispatcher import Dispatcher
 from aiogram.dispatcher.webhook import get_new_configured_app
 from aiohttp import web
-from aiogram.dispatcher import Dispatcher
 
 import instances
-from utils.settings import WEBHOOK_PATH, WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV, WEBAPP_HOST, WEBAPP_PORT, WEBHOOK_URL, \
+from utils.models import connect, cleanup
+from utils.settings import WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT, WEBHOOK_URL, \
     API_PATH, SKIP_UPDATES
 from .middleware import middleware
-from utils.models import connect, cleanup
 
 
 class AppBundle:
@@ -59,4 +58,11 @@ class AppBundle:
         # context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
         # Start web-application.
         # web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT, ssl_context=context)
+
+        # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
+        # sock.bind((WEBAPP_HOST, 0))
+        # print(sock.getsockname()[1])
+
         web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT)
+

@@ -40,10 +40,14 @@ async def middleware(request: aiohttp.web.Request, handler):
         if not issubclass(type(resp), BaseModel):
             logging.error('API response is not a pydantic class')
             return aiohttp.web.json_response({}, status=500)
+        if isinstance(resp, ErrorResponse):
+            return aiohttp.web.json_response(resp.dict(), status=400)
         return aiohttp.web.json_response(resp.dict())
     elif request.method == "GET":
         try:
             resp = await handler(request, **request.query, **dict(request.match_info))
+            if isinstance(resp, ErrorResponse):
+                return aiohttp.web.json_response(resp.dict(), status=400)
             if issubclass(type(resp), BaseModel):
                 return aiohttp.web.json_response(resp.dict())
             elif issubclass(type(resp), FileResponse):

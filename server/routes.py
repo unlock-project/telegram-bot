@@ -97,6 +97,12 @@ async def getUserID(request: web.Request, chat_id: int):
         return ErrorResponse(reason="User not found")
     return UserIdResponse(user_id=user.id)
 
+@routes.get('/user/chat-id')
+async def getUserChatID(request: web.Request, user_id: int):
+    user = utils.models.User.get_or_none(User.id == user_id)
+    if user is None:
+        return ErrorResponse(reason="User not found")
+    return UserChatIdResponse(chat_id=user.chat_id)
 
 @routes.get('/user/validate')
 async def validateUser(request: web.Request, auth: str):

@@ -3,7 +3,7 @@ import typing
 
 from aiogram import types
 from aiogram.types import InlineKeyboardMarkup, \
-    InlineKeyboardButton, WebAppInfo
+    InlineKeyboardButton, WebAppInfo, ReplyKeyboardMarkup
 
 import schemas
 from utils import messages
@@ -93,16 +93,17 @@ def getVoteKeyboard(vote_id: int, options: typing.List[schemas.Option]):
 
     return vote_keyboard
 
+def getTunnelKeyboard():
+    tunnel_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+    tunnel_keyboard.add(messages.stop_tunnel)
+    return tunnel_keyboard
 
 def getMainKeyboard(user: User):
     keyboard = types.reply_keyboard.ReplyKeyboardMarkup(resize_keyboard=True)
     if user.admin_mode:
         # admin keyboard
-        keyboard.add(messages.broadcast)
-        keyboard.add(messages.update_db)
-        keyboard.add(messages.votes)
-        keyboard.add(messages.questions)
-        keyboard.add(messages.registrations)
+
+        keyboard.add(messages.start_tunnel)
         keyboard.add(messages.turn_off_admin)
     else:
         keyboard.add(messages.score_request, messages.daily_report, messages.promocode)

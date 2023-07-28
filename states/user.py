@@ -5,3 +5,5 @@ class UserState(StatesGroup):
     entering_promocode = State()
     admin_broadcast = State()
     answering_question = State()
+    opening_tunnel = State()
+    in_tunnel = State()

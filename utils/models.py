@@ -1,10 +1,10 @@
-import inspect
 import logging
 import traceback
 
 import aiohttp.web
 from peewee import *
 from playhouse.postgres_ext import JSONField
+
 from utils.settings import DB_USER, DB_HOST, DB_NAME, DB_PASS, DB_PORT
 
 db = PostgresqlDatabase(DB_NAME, host=DB_HOST, port=DB_PORT, user=DB_USER, password=DB_PASS, autorollback=True)

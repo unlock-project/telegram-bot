@@ -1,19 +1,40 @@
-import datetime
 import logging
 import traceback
 
-import peewee
 from aiogram import types
 from aiogram.dispatcher import FSMContext, filters
 
 import keyboard as km
 import services
 from instances import dp, bot, unlock_api
-from states import UserState
+from states import UserState, InTunnelData
 from utils import models, messages
+from utils.models import User
 from utils.my_filters import IsAdmin
 from utils.settings import SUPER_ADMIN
 
+
+@dp.message_handler(filters.Text(equals=messages.stop_tunnel), state=UserState.in_tunnel)
+async def stop_tunnel(message: types.Message, state: FSMContext):
+    companion_data = InTunnelData(**(await state.get_data()))
+    await state.storage.finish(chat=companion_data.companion_chat_id)
+    await state.finish()
+    user = User.get_or_none(User.chat_id == message.chat.id)
+    companion = User.get_or_none(User.chat_id == companion_data.companion_chat_id)
+
+    await bot.send_message(chat_id=message.chat.id, text="Диалог завершен",
+                           reply_markup=km.getMainKeyboard(user) if user is not None else None)
+    await bot.send_message(chat_id=companion_data.companion_chat_id,
+                           text=f"{companion_data.role} завершил диалог",
+                           reply_markup=km.getMainKeyboard(companion) if companion is not None else None)
+
+@dp.message_handler(state=UserState.in_tunnel, content_types='any')
+async def in_tunnel(message: types.Message, state: FSMContext):
+    if message.content_type == "poll":
+        return
+    companion_data = InTunnelData(**(await state.get_data()))
+    await bot.copy_message(chat_id=companion_data.companion_chat_id, from_chat_id=message.chat.id,
+                           message_id=message.message_id)
 
 @dp.message_handler(commands="start")
 async def start(message: types.Message):
@@ -202,3 +223,37 @@ async def back_button(message: types.Message):
         return
     await bot.send_message(message.chat.id, messages.ok_message,
                            reply_markup=km.getMainKeyboard(user))
+
+@dp.message_handler(IsAdmin(), filters.Text(equals=messages.start_tunnel))
+async def start_tunnel_button(message: types.Message, state: FSMContext):
+    await state.set_state(UserState.opening_tunnel)
+    await bot.send_message(message.chat.id, messages.choose_companion)
+
+@dp.message_handler(IsAdmin(), state=UserState.opening_tunnel)
+async def chose_tunnel_id(message: types.Message, state: FSMContext):
+    s_user_id = message.text
+    if s_user_id == "-1":
+        await state.finish()
+        return
+    if not str.isdigit(s_user_id):
+        await bot.send_message(message.chat.id, "Введите число")
+        return
+
+    companion: User | None = User.get_or_none(User.id == int(s_user_id))
+    if companion is None:
+        await bot.send_message(message.chat.id, "Собеседник не найден")
+        return
+    if companion.chat_id == message.chat.id:
+        await bot.send_message(message.chat.id, "Вы не можете начать диалог с собой!")
+        return
+    admin_data = InTunnelData("Админ", companion.chat_id)
+    participant_data = InTunnelData("Участник", message.chat.id)
+
+    await state.set_state(UserState.in_tunnel)
+    await state.set_data(admin_data.__dict__)
+    await state.storage.set_state(chat=companion.chat_id, state=UserState.in_tunnel)
+    await state.storage.set_data(chat=companion.chat_id, data=participant_data.__dict__)
+    await bot.send_message(companion.chat_id, messages.tunnel_started.format(role="Админ"),
+                           reply_markup=km.getTunnelKeyboard())
+    await bot.send_message(message.chat.id, messages.tunnel_started.format(role="Участник"),
+                           reply_markup=km.getTunnelKeyboard())
