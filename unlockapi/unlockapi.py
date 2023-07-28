@@ -1,8 +1,6 @@
-import asyncio
-import json
-
 import aiohttp
 import pydantic
+
 from unlockapi import schemas
 from .methods import APIMethods
 
@@ -81,4 +79,5 @@ class UnlockAPI:
         return schemas.MessageSchema(**data)
 
     async def close(self):
-        await self.__session.close()
+        if self.__session is not None:
+            await self.__session.close()

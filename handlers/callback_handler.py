@@ -1,11 +1,9 @@
 import json
 
 from aiogram import types
-from aiogram.dispatcher import FSMContext
 
 import services
 from instances import dp, bot
-from states import UserState
 from utils import messages
 from utils.models import Vote, Registration, User
 from utils.my_filters import CallbackType
