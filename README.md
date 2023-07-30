@@ -38,6 +38,7 @@ framework. Bot working on webhooks and have simple aiohttp web server for listen
 | `DB_USER` | `postgres` | Database user. | 
 | `DB_PASS` | `postgres` | Database password. |  
 | `DB_NAME` | `unlockbot` | Database name |
+|`UNLOCK_API_TOKEN` | !! REQUIRED !! | Secret key for API |
 
 
 Example development config:  
@@ -47,6 +48,7 @@ BOT_TOKEN=123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
 CHANNEL_ID=-1001981984707
 UNLOCK_API_URL=https://api.example.com/
 WEBHOOK_HOST=https://bot.example.com 
+UNLOCK_API_TOKEN=ASJk1dssakJS32AdkI@8
 ```  
   
 ## Development  

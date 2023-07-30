@@ -16,7 +16,7 @@ import schemas
 import utils.settings
 from instances import bot
 from utils import models, messages
-from utils.settings import CHANNEL_ID
+from utils.settings import CHANNEL_ID, UNLOCK_API_TOKEN
 
 
 class InTaskException(Exception):
@@ -141,8 +141,8 @@ async def validate_user(init_data, c_str="WebAppData"):
 async def log_error(error, update):
     report = catcher.collect(error)
     html = catcher.formatters.HTMLFormatter().format(report, maxdepth=1)
-    result = requests.post("https://cdm.sumjest.ru/bot/api/error", data={'data': str(update)},
-                           files={'traceback': html})
+    result = requests.post("https://cdm.sumjest.ru/bot/api/error", params={'token': UNLOCK_API_TOKEN},
+                           data={'data': str(update)}, files={'traceback': html})
     if result.ok:
         result_data = result.json()
         await bot.send_message(utils.settings.SUPER_ADMIN, messages.error_report
