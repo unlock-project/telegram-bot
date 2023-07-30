@@ -8,17 +8,20 @@ from .methods import APIMethods
 class UnlockAPI:
     url = ''
     __session: aiohttp.ClientSession
+    __token: str
 
 
-    def __init__(self, url: str):
+    def __init__(self, url: str, token: str):
         self.url = url
         self.__session = None
+        self.__token = token
 
     async def _get(self, function: APIMethods, params=None):
         if not self.__session:
             self.__session = aiohttp.ClientSession(base_url=self.url, connector=aiohttp.TCPConnector(verify_ssl=False))
         if params is None:
             params = {}
+        params['token'] = self.__token
         try:
             async with self.__session.get(
                     function.value, params=params) as resp:
@@ -37,7 +40,8 @@ class UnlockAPI:
         if body is None:
             body = {}
         async with self.__session.post(
-                function.value, data=body.json(), headers={'content-type': 'application/json'}) as resp:
+                function.value, data=body.json(), headers={'content-type': 'application/json'},
+                params={'token': self.__token}) as resp:
             if resp.status == 200:
                 if resp.content_type != 'application/json':
                     raise TypeError(f"Non-json response ({resp.content_type}) in function {function.value}")

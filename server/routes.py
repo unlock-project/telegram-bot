@@ -15,6 +15,8 @@ from services import start_registration, start_voting, broadcast, start_question
 
 routes = web.RouteTableDef()
 
+
+
 @routes.post('/sendmessage')
 async def sendMessage(request: web.Request, data: SendMessageRequest):
     user = User.get_or_none(User.id==data.user_id)

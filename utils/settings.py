@@ -13,6 +13,7 @@ BOT_USERNAME = ""
 SKIP_UPDATES = bool(int(os.getenv('SKIP_UPDATES', '0')))
 # Unlock api
 UNLOCK_API_URL = os.getenv('UNLOCK_API_URL')
+UNLOCK_API_TOKEN = os.getenv('UNLOCK_API_TOKEN')
 # webhook settings
 WEBHOOK_HOST = os.getenv('WEBHOOK_HOST')
 WEBHOOK_PATH = '/bot/'
