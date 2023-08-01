@@ -1,5 +1,4 @@
-dev.env
-.env
+*.env
 openapi.yaml
 back.api.yaml
 /venv
