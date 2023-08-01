@@ -2,11 +2,8 @@ version: '1.0'
 services:
   postgres:
     image: postgres:13.3
-    environment:
-      POSTGRES_DB: "unlockbot"
-      POSTGRES_USER: "unlockbot"
-      POSTGRES_PASSWORD: "rO0&%P6&4Ucm6PZ66ajiJ$6Ys9"
-      PGDATA: /data/postgres
+    env_file:
+      - "postgres.env"
     volumes:
        - postgres:/data/postgres
     ports:
