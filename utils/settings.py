@@ -11,6 +11,7 @@ SUPER_ADMIN = int(os.getenv('SUPER_ADMIN', '313961073'))
 CHANNEL_ID = int(os.getenv('CHANNEL_ID'))
 BOT_USERNAME = ""
 SKIP_UPDATES = bool(int(os.getenv('SKIP_UPDATES', '0')))
+RATE_LIMIT = float(os.getenv('RATE_LIMIT', '1'))
 # Unlock api
 UNLOCK_API_URL = os.getenv('UNLOCK_API_URL')
 UNLOCK_API_TOKEN = os.getenv('UNLOCK_API_TOKEN')

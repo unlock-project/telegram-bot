@@ -3,6 +3,9 @@ import traceback
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext, filters
+from aiogram.dispatcher.handler import CancelHandler
+from aiogram.dispatcher.middlewares import BaseMiddleware
+from aiogram.types import Message, CallbackQuery, InlineQuery
 
 import keyboard as km
 import services
@@ -12,6 +15,8 @@ from utils import models, messages
 from utils.models import User
 from utils.my_filters import IsAdmin
 from utils.settings import SUPER_ADMIN
+
+
 
 
 @dp.message_handler(filters.Text(equals=messages.stop_tunnel), state=UserState.in_tunnel)
@@ -74,19 +79,84 @@ async def raise_error(message: types.Message):
 
 
 @dp.message_handler(commands="admin")
-async def clear_keyboard(message: types.Message):
+async def make_admin(message: types.Message):
     chat_id = message.chat.id
     if chat_id != SUPER_ADMIN:
         return
-
+    super_admin: User = User.get_or_none(chat_id=chat_id)
+    if super_admin is None:
+        return
     try:
         args = message.text.split()[1]
         user = models.User.get((models.User.chat_id == int(args)))
+        if user.is_admin:
+            await bot.send_message(chat_id, messages.already_admin)
+            return
         user.is_admin = True
         user.save()
+        await bot.send_message(user.chat_id, messages.became_admin.format(admin_name=f'{super_admin.first_name} {super_admin.last_name}'))
+        await bot.send_message(chat_id, messages.appointed_admin.format(user_name=f'{user.first_name} {user.last_name}'))
     except:
         logging.error(traceback.format_exc())
 
+@dp.message_handler(commands="revoke")
+async def revoke_admin(message: types.Message):
+    chat_id = message.chat.id
+    if chat_id != SUPER_ADMIN:
+        return
+    super_admin: User = User.get_or_none(chat_id=chat_id)
+    if super_admin is None:
+        return
+    try:
+        args = message.text.split()[1]
+        user = models.User.get((models.User.chat_id == int(args)))
+        user.is_admin = False
+        if not user.is_admin:
+            await bot.send_message(chat_id, messages.not_admin)
+            return
+        user.save()
+        await bot.send_message(user.chat_id, messages.no_longer_admin.format(admin_name=f'{super_admin.first_name} {super_admin.last_name}'))
+        await bot.send_message(chat_id, messages.revoked_admin.format(user_name=f'{user.first_name} {user.last_name}'))
+    except:
+        logging.error(traceback.format_exc())
+
+@dp.message_handler(IsAdmin(), commands="ban")
+async def ban_user(message: types.Message):
+    chat_id = message.chat.id
+    admin: User = User.get_or_none(chat_id=chat_id)
+    if admin is None:
+        return
+    try:
+        args = message.text.split()[1]
+        user = models.User.get((models.User.chat_id == int(args)))
+        if user.is_banned:
+            await bot.send_message(chat_id, messages.already_banned)
+            return
+        user.is_banned = True
+        user.save()
+        await bot.send_message(user.chat_id, messages.banned_user.format(admin_name=f'{admin.first_name} {admin.last_name}'))
+        await bot.send_message(chat_id, messages.ban_user.format(user_name=f'{user.first_name} {user.last_name}'))
+    except:
+        logging.error(traceback.format_exc())
+
+@dp.message_handler(IsAdmin(), commands="unban")
+async def ban_user(message: types.Message):
+    chat_id = message.chat.id
+    admin: User = User.get_or_none(chat_id=chat_id)
+    if admin is None:
+        return
+    try:
+        args = message.text.split()[1]
+        user = models.User.get((models.User.chat_id == int(args)))
+        if not user.is_banned:
+            await bot.send_message(chat_id, messages.not_banned)
+            return
+        user.is_banned = False
+        user.save()
+        await bot.send_message(user.chat_id, messages.unbanned_user.format(admin_name=f'{admin.first_name} {admin.last_name}'))
+        await bot.send_message(chat_id, messages.unban_user.format(user_name=f'{user.first_name} {user.last_name}'))
+    except:
+        logging.error(traceback.format_exc())
 
 @dp.message_handler(IsAdmin(), commands="webapp")
 async def webapp_keyboard(message: types.Message):

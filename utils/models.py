@@ -20,6 +20,7 @@ class User(BaseModel):
     id = IntegerField(null=False)
     is_admin = BooleanField(default=False)
     admin_mode = BooleanField(default=False)
+    is_banned = BooleanField(default=False)
     first_name = TextField()
     last_name = TextField()
 

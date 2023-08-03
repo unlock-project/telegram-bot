@@ -5,7 +5,7 @@ import os.path
 
 import aiogram
 
-from handlers import callback_handler, message_handler, event_handler, error_handler  # noqa: F401
+from handlers import callback_handler, message_handler, event_handler, error_handler, middlewares  # noqa: F401
 from instances import bot, dp, app
 from server.routes import routes
 from utils.my_filters import IsAdmin
