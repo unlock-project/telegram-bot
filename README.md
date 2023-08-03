@@ -39,6 +39,7 @@ framework. Bot working on webhooks and have simple aiohttp web server for listen
 | `DB_PASS` | `postgres` | Database password. |  
 | `DB_NAME` | `unlockbot` | Database name |
 |`UNLOCK_API_TOKEN` | !! REQUIRED !! | Secret key for API |
+|`RATE_LIMIT` | `1` | Rate limit in seconds |
 
 
 Example development config:  
