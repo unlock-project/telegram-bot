@@ -2,10 +2,10 @@ from .models import BroadcastMessageRequest, BroadcastRegistrationRequest, Updat
     BroadcastQuestionRequest, BroadcastVoteRequest, SendMessageRequest, BroadcastVoteResponse, \
     BroadcastRegistrationResponse, ErrorResponse, UpdateRegistrationResponse, BroadcastMessageResponse, \
     MessageSentResponse, BroadcastQuestionResponse, Option, UserIdResponse, UserValidateResponse, LogsResponse, \
-    UserChatIdResponse
+    UserChatIdResponse, SendScannerResponse, SendScannerRequest
 
 __all__ = ["BroadcastMessageRequest", "BroadcastRegistrationRequest", "UpdateRegistrationRequest",
            "BroadcastQuestionRequest", "BroadcastVoteRequest", "SendMessageRequest", "BroadcastVoteResponse",
            "BroadcastRegistrationResponse", "ErrorResponse", "UpdateRegistrationResponse", "BroadcastMessageResponse",
            "MessageSentResponse", "BroadcastQuestionResponse", "Option", "UserIdResponse", "UserValidateResponse",
-           "LogsResponse", "UserChatIdResponse"]
+           "LogsResponse", "UserChatIdResponse", "SendScannerResponse", "SendScannerRequest"]

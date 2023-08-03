@@ -11,7 +11,7 @@ from instances import bot
 from schemas import *
 from utils.models import Vote, Registration, User
 from utils.settings import LOGS_PATH
-from services import start_registration, start_voting, broadcast, start_question, edit_registration
+from services import start_registration, start_voting, broadcast, start_question, edit_registration, send_scanners
 
 routes = web.RouteTableDef()
 
@@ -126,3 +126,11 @@ async def log(request: web.Request, filename: str):
         return ErrorResponse(reason="File not found")
 
     return web.FileResponse(path=log_path)
+
+@routes.post('/sendscanner')
+async def send_scanner(request: web.Request, data: SendScannerRequest):
+    event_id = data.event_id
+    users = data.organizers
+    asyncio.get_running_loop().create_task(send_scanners(event_id, users, data.event_name)) \
+        .add_done_callback(services.services.task_done_callback)
+    return SendScannerResponse(event_id=event_id)

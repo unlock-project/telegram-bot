@@ -27,12 +27,12 @@ async def middleware(request: aiohttp.web.Request, handler):
         try:
             data = await request.json()
         except:
-            return aiohttp.web.json_response(ErrorResponse(reason='Bad json data').dict())
+            return aiohttp.web.json_response(ErrorResponse(reason='Bad json data').dict(), status=400)
         try:
             validated = data_class(**data)
         except:
             logging.error(traceback.format_exc())
-            return aiohttp.web.json_response(ErrorResponse(reason='Bad request').dict())
+            return aiohttp.web.json_response(ErrorResponse(reason='Bad request').dict(), status=400)
         try:
             resp = await handler(request, validated)
         except Exception as ex:

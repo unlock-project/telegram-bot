@@ -59,14 +59,13 @@ class UnlockAPI:
 
     async def events_today(self, user_id: int):
         data = await self._get(APIMethods.EVENTS_TODAY, {"user_id": user_id})
-        return [schemas.EventSchema(**event) for event in data]
+        return schemas.EventSchema(**data)
 
-    async def promo_activate(self, code: str, user_id: int, time: str):
-        data = await self._post(APIMethods.PROMO_ACTIVATE, schemas.PromoBotSchema(code=code, user_id=user_id,
-                                                                                  time=time))
+    async def promo_activate(self, code: str, user_id: int):
+        data = await self._post(APIMethods.PROMO_ACTIVATE, schemas.PromoBotSchema(code=code, user_id=user_id))
         return schemas.PromoSchema(**data)
 
-    async def question_answer(self, question_id: int, user_id: int, answer: str):
+    async def question_answer(self, question_id: int, user_id: int, answer: str) -> schemas.MessageSchema:
         data = await self._post(APIMethods.QUESTION_RESPONSE, schemas.AnswerBotSchema(question_id=question_id,
                                                                                       user_id=user_id, answer=answer))
         return schemas.MessageSchema(**data)
@@ -81,6 +80,10 @@ class UnlockAPI:
         data = await self._post(APIMethods.VOTE_RESPONSE, schemas.ChoiceBotSchema(vote_id=vote_id, user_id=user_id,
                                                                                   option_id=option_id))
         return schemas.MessageSchema(**data)
+
+    async def get_balance(self, user_id: int):
+        data = await self._get(APIMethods.USER_BALANCE, {'user_id': user_id})
+        return schemas.BalanceSchema(**data)
 
     async def close(self):
         if self.__session is not None:

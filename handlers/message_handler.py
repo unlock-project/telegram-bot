@@ -90,44 +90,40 @@ async def clear_keyboard(message: types.Message):
 
 @dp.message_handler(IsAdmin(), commands="webapp")
 async def webapp_keyboard(message: types.Message):
-    await bot.send_message(message.chat.id, "Hello", reply_markup=km.getQRScannerKeyboard())
+    await bot.send_message(message.chat.id, "Hello", reply_markup=km.getTestQRScannerKeyboard())
 
 
 @dp.message_handler(state=UserState.answering_question)
 async def answer_question(message: types.Message, state: FSMContext):
     answer = message.text
-    question_id = (await state.get_data())["question_id"]
+    state_data = (await state.get_data())
+    question_id = state_data["question_id"]
+    message_id = state_data["message_id"]
     await state.finish()
     user = models.User.get((models.User.chat_id == message.chat.id))
-    data = await unlock_api.sendAnswer(user.id, question_id, answer)
-    await bot.send_message(message.chat.id, data["msg"])
+    data = (await unlock_api.question_answer(question_id, user.id, answer))
+    await bot.send_message(message.chat.id, data.text)
+    await bot.edit_message_reply_markup(message.chat.id, message_id, reply_markup='')
 
 
-# @dp.message_handler(state=UserState.entering_promocode)
-# async def promocode_enter(message: types.Message, state: FSMContext):
-#     promocode = message.text
-#     chat_id = message.chat.id
-#     await state.finish()
-#     promocode_models = Promocode.select().where((Promocode.date == datetime.datetime.now().date().strftime("%Y-%m-%d")),
-#                                                 (peewee.fn.LOWER(Promocode.code) == promocode.lower()))
-#     if not len(promocode_models):
-#         await bot.send_message(chat_id, messages.promocode_not_found_message)
-#         return
-#     user = models.User.get((models.User.chat_id == chat_id))
-#     promocode_model: Promocode = promocode_models[0]
-#     text = promocode_model.answer
-#     photo = promocode_model.photo
-#
-#     data = await unlock_api.sendPromocode(user.id, promocode_model.id)
-#     if data["success"]:
-#         if text is not None:
-#             await bot.send_message(chat_id, text)
-#         if photo is not None:
-#             await bot.send_photo(chat_id, photo)
-#
-#
-#     else:
-#         await bot.send_message(chat_id, data["msg"])
+@dp.message_handler(filters.Text(equals=messages.promocode))
+async def promo_message(message: types.Message):
+    await UserState.entering_promocode.set()
+    await bot.send_message(message.chat.id, messages.enter_promocode_message)
+
+@dp.message_handler(state=UserState.entering_promocode)
+async def promocode_enter(message: types.Message, state: FSMContext):
+    promocode = message.text
+    chat_id = message.chat.id
+    await state.finish()
+
+    user = models.User.get_or_none(User.chat_id == chat_id)
+    if user is None:
+        await bot.send_message(chat_id, messages.not_met)
+        return
+
+    result = await unlock_api.promo_activate(promocode, user.id)
+    await bot.send_message(chat_id, result.text)
 
 
 @dp.message_handler(IsAdmin(), state=UserState.admin_broadcast)
@@ -146,8 +142,8 @@ async def score_request(message: types.Message):
         await bot.send_message(chat_id, messages.not_met)
         return
 
-    score = await unlock_api.getScore(user.id)
-    await bot.send_message(chat_id, messages.score_message.format(score=score))
+    data = await unlock_api.get_balance(user.id)
+    await bot.send_message(chat_id, messages.score_message.format(score=data.balance))
 
 
 @dp.message_handler(filters.Text(equals=messages.daily_report))
@@ -160,11 +156,29 @@ async def daily_report(message: types.Message):
         await bot.send_message(chat_id, messages.not_met)
         return
     # do magic with api
-    data = await unlock_api.getDaily(user.id)
-    msg = data["msg"]
-    daily_score = data["daily_score"]
-    await bot.send_message(chat_id, messages.daily_report_message.format(report=msg,
-                                                                         daily_score=daily_score))
+    data = await unlock_api.events_today(user.id)
+    if not data.message:
+        await bot.send_message(chat_id, messages.no_event_today)
+        return
+    await bot.send_message(chat_id, messages.daily_report_message.format(report=data.message))
+
+@dp.message_handler(filters.Text(equals=messages.team_report))
+async def team_report(message: types.Message):
+    chat_id = message.chat.id
+
+    try:
+        user = models.User.get(chat_id=chat_id)
+    except:
+        await bot.send_message(chat_id, messages.not_met)
+        return
+
+    data = await unlock_api.user_team(user.id)
+
+    tutor: User = models.User.get_or_none(id=data.tutor)
+
+    await bot.send_message(chat_id, messages.team_message.format(name=data.name, score=data.balance,
+                                                                 tutor='' if tutor is None else f"{tutor.first_name} "
+                                                                                                f"{tutor.last_name}"))
 
 @dp.message_handler(filters.Text(equals=messages.qr_request))
 async def qr_request(message: types.Message):
@@ -208,7 +222,7 @@ async def turn_off_admin_button(message: types.Message):
 
 
 @dp.message_handler(IsAdmin(), filters.Text(equals=messages.broadcast))
-async def promocode_button(message: types.Message):
+async def broadcast_button(message: types.Message):
     await UserState.admin_broadcast.set()
     await bot.send_message(message.chat.id, messages.enter_text_to_broadcast_message)
 
