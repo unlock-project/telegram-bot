@@ -11,9 +11,15 @@ from utils.models import User
 from utils.settings import UNLOCK_API_URL
 
 
-def getQRScannerKeyboard():
+def getTestQRScannerKeyboard():
     kb = InlineKeyboardMarkup()
     kb.add(InlineKeyboardButton("Перейти", web_app=WebAppInfo(url=f'{UNLOCK_API_URL}bot/scanner')))
+    return kb
+
+def getQRScannerKeyboard(event_id: int):
+    kb = InlineKeyboardMarkup()
+    kb.add(InlineKeyboardButton("Открыть сканнер",
+                                web_app=WebAppInfo(url=f'{UNLOCK_API_URL}bot/scanner?event_id={event_id}')))
     return kb
 
 def getQRViewKeyboard():
@@ -106,7 +112,8 @@ def getMainKeyboard(user: User):
         keyboard.add(messages.start_tunnel)
         keyboard.add(messages.turn_off_admin)
     else:
-        keyboard.add(messages.score_request, messages.daily_report, messages.promocode)
+        keyboard.add(messages.score_request, messages.daily_report)
+        keyboard.add(messages.promocode, messages.team_report)
         keyboard.add(messages.qr_request)
         if user.is_admin:
             keyboard.add(messages.turn_on_admin)

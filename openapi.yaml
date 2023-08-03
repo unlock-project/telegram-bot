@@ -285,6 +285,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /sendscanner:
+    post:
+      tags:
+      - Broadcast
+      summary: Send scanner web app to users
+      description: bla bla bla
+      operationId: send_scanner
+      requestBody:
+        description: Send scanners
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendScannerRequest'
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendScannerResponse'
+        "400":
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /registration/update:
     post:
       tags:
@@ -542,3 +568,22 @@ components:
           - log-2023-07-14
           items:
             type: string
+    SendScannerRequest:
+      required:
+      - event_id
+      - organizers
+      type: object
+      properties:
+        event_id:
+          type: integer
+        organizers:
+          type: array
+          items:
+            type: integer
+    SendScannerResponse:
+      required:
+      - event_id
+      type: object
+      properties:
+        event_id:
+          type: integer

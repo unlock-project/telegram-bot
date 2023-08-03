@@ -18,5 +18,7 @@ services:
       - ".env"
     depends_on:
       - postgres
+    volumes:
+      - C:\home\unlock\telegram-bot\logs:/app/logs
 volumes:
   postgres:

@@ -16,6 +16,7 @@ import schemas
 import utils.settings
 from instances import bot
 from utils import models, messages
+from utils.models import Registration
 from utils.settings import CHANNEL_ID, UNLOCK_API_TOKEN
 
 
@@ -62,7 +63,6 @@ async def start_voting(vote_id: int, vote_text: str, options: typing.List[schema
 async def start_question(question_text: str, question_id: int):
     users = models.User.select()
     for user in users:
-
         successful = False
         while not successful:
             await asyncio.sleep(0.040)  # not more than 30 per second (25)
@@ -98,6 +98,54 @@ async def edit_registration(msg_id: int, registration_id: int, registration_text
     except:
         logging.error(traceback.format_exc())
         logging.error(CHANNEL_ID)
+
+async def update_option(options: list[dict], option_id: int, new_option_text: str) -> list[dict]:
+    for option in options:
+        if option['option_id'] == option_id:
+            option['option_text'] = new_option_text
+    return options
+
+async def update_registration(msg_id: int, registration_id: int, option_id: int, option_text: str) -> int:
+    registration = Registration.get_or_none(Registration.registration_id==registration_id)
+    options = await update_option(registration.options, option_id, option_text)
+    registration.options = options
+    registration.save()
+
+    mapped_options = []
+    for option in options:
+        mapped_options.append(schemas.Option(**option))
+
+
+    keyboard = km.getRegistrationKeyboard(registration.registration_id, mapped_options)
+    try:
+        result = await bot.edit_message_reply_markup(CHANNEL_ID, msg_id, reply_markup=keyboard)
+    except aiogram.utils.exceptions.MessageNotModified as ex:
+        logging.warning(str(ex))
+    except Exception as ex:
+        raise ex
+
+
+
+async def send_scanners(event_id: int, users: typing.List[int], event_name: str):
+    chat_ids = models.User.select(models.User.chat_id).where(models.User.id.in_(users))
+
+    for chat_id in chat_ids:
+
+        successful = False
+        while not successful:
+            await asyncio.sleep(0.040)  # not more than 30 per second (25)
+            successful = True
+            try:
+                await bot.send_message(chat_id, messages.scanner_message.format(event_name=event_name),
+                                       reply_markup=km.getQRScannerKeyboard(event_id))
+            except aiogram.utils.exceptions.RetryAfter as exception:
+                logging.warning(f"Flood control exceeded. Waiting {exception.timeout}")
+                await asyncio.sleep(exception.timeout)
+                successful = False
+            except Exception as ex:
+                logging.error(traceback.format_exc())
+                logging.error(chat_id)
+
 
 
 async def get_option_by_id(options: list, option_id: int) -> dict | None:
