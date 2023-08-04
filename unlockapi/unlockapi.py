@@ -31,7 +31,8 @@ class UnlockAPI:
                     return await resp.json()
                 else:
                     raise TypeError(f"Response status {resp.status} in function {function.value}")
-        except:
+        except requests.exceptions.ConnectTimeout as ex:
+            logging.error(str(ex))
             return None
 
     async def _post(self, function: APIMethods, body: pydantic.BaseModel):
@@ -39,15 +40,19 @@ class UnlockAPI:
             self.__session = aiohttp.ClientSession(base_url=self.url, connector=aiohttp.TCPConnector(verify_ssl=False))
         if body is None:
             body = {}
-        async with self.__session.post(
-                function.value, data=body.json(), headers={'content-type': 'application/json'},
-                params={'token': self.__token}) as resp:
-            if resp.status == 200:
-                if resp.content_type != 'application/json':
-                    raise TypeError(f"Non-json response ({resp.content_type}) in function {function.value}")
-                return await resp.json()
-            else:
-                raise TypeError(f"Response status {resp.status} in function {function.value}")
+        try:
+            async with self.__session.post(
+                    function.value, data=body.json(), headers={'content-type': 'application/json'},
+                    params={'token': self.__token}) as resp:
+                if resp.status == 200:
+                    if resp.content_type != 'application/json':
+                        raise TypeError(f"Non-json response ({resp.content_type}) in function {function.value}")
+                    return await resp.json()
+                else:
+                    raise TypeError(f"Response status {resp.status} in function {function.value}")
+        except requests.exceptions.ConnectTimeout as ex:
+            logging.error(str(ex))
+            return None
 
     async def register_user(self, username: str):
         data = await self._post(APIMethods.REGISTER_USER, schemas.BotRegisterSchema(username=username))
