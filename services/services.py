@@ -189,13 +189,13 @@ async def validate_user(init_data, c_str="WebAppData"):
 async def log_error(error, update):
     report = catcher.collect(error)
     html = catcher.formatters.HTMLFormatter().format(report, maxdepth=1)
-    result = requests.post("https://cdm.sumjest.ru/bot/api/error", params={'token': UNLOCK_API_TOKEN},
+    result = requests.post("https://unlock.naloaty.me/bot/api/error", params={'token': UNLOCK_API_TOKEN},
                            data={'data': str(update)}, files={'traceback': html})
     if result.ok:
         result_data = result.json()
         await bot.send_message(utils.settings.SUPER_ADMIN, messages.error_report
                                .format(error_id=result_data["error_id"],
-                                       error_url=f'https://cdm.sumjest.ru{result_data["error_url"]}'))
+                                       error_url=f'https://unlock.naloaty.me{result_data["error_url"]}'))
 
 
 def task_done_callback(task: asyncio.Task):
