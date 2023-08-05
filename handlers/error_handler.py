@@ -7,7 +7,7 @@ from typing import Any
 from aiogram.types import Update, Message
 
 from instances import dp
-from services.services import log_error
+from services.services import log_error, task_done_callback
 
 
 class MessageEncoder(json.JSONEncoder):
@@ -21,7 +21,7 @@ class MessageEncoder(json.JSONEncoder):
 async def all_handler(update: Update, error: Exception):
     logging.error(traceback.format_exc())
     try:
-        asyncio.get_running_loop().create_task(log_error(error, update)).add_done_callback(services.services.task_done_callback)
+        asyncio.get_running_loop().create_task(log_error(error, update)).add_done_callback(task_done_callback)
     except:
         logging.error(traceback.format_exc())
     return True
