@@ -242,13 +242,17 @@ async def team_report(message: types.Message):
         await bot.send_message(chat_id, messages.not_met)
         return
 
-    data = await unlock_api.user_team(user.id)
-
-    tutor: User = models.User.get_or_none(id=data.tutor)
-
-    await bot.send_message(chat_id, messages.team_message.format(name=data.name, score=data.balance,
-                                                                 tutor='' if tutor is None else f"{tutor.first_name} "
-                                                                                                f"{tutor.last_name}"))
+    try:
+        data = await unlock_api.user_team(user.id)
+    
+        tutor: User = models.User.get_or_none(id=data.tutor)
+    
+        await bot.send_message(chat_id, messages.team_message.format(name=data.name, score=data.balance,
+                                                                     tutor='' if tutor is None else f"{tutor.first_name} "
+                                                                                                    f"{tutor.last_name}"))
+    except Exception as ex:
+        logging.error(str(ex))
+        await bot.send_message(chat_id, "Команда не найдена")
 
 @dp.message_handler(filters.Text(equals=messages.qr_request))
 async def qr_request(message: types.Message):
