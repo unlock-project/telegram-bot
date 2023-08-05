@@ -9,7 +9,7 @@ from states import UserState
 from utils import messages
 from utils.models import Vote, Registration, User
 from utils.my_filters import CallbackType
-from utils.settings import BOT_USERNAME
+from utils import settings
 
 
 @dp.callback_query_handler(CallbackType("vote"))
@@ -27,7 +27,7 @@ async def make_choice_event(callback: types.CallbackQuery):
     try:
         user = User.get(chat_id=chat_id)
     except:
-        await bot.answer_callback_query(callback.id, messages.not_met.format(bot=BOT_USERNAME), show_alert=True)
+        await bot.answer_callback_query(callback.id, messages.not_met.format(bot=settings.BOT_USERNAME), show_alert=True)
         return
     data = await unlock_api.vote_choose(vote.vote_id, user.id, option["option_id"])
     await bot.answer_callback_query(callback.id, data.text, show_alert=True)
@@ -64,7 +64,7 @@ async def make_choice_event(callback: types.CallbackQuery):
     try:
         user = User.get(chat_id=chat_id)
     except:
-        await bot.answer_callback_query(callback.id, messages.not_met.format(bot=BOT_USERNAME), show_alert=True)
+        await bot.answer_callback_query(callback.id, messages.not_met.format(bot=settings.BOT_USERNAME), show_alert=True)
         return
 
     data = await unlock_api.registration_choose(registration.registration_id, user.id, option["option_id"])
