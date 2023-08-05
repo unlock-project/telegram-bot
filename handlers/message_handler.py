@@ -14,7 +14,7 @@ from states import UserState, InTunnelData
 from utils import models, messages
 from utils.models import User
 from utils.my_filters import IsAdmin
-from utils.settings import SUPER_ADMIN
+from utils.settings import SUPER_ADMIN, BOT_USERNAME
 
 
 
@@ -189,7 +189,7 @@ async def promocode_enter(message: types.Message, state: FSMContext):
 
     user = models.User.get_or_none(User.chat_id == chat_id)
     if user is None:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=BOT_USERNAME))
         return
 
     result = await unlock_api.promo_activate(promocode, user.id)
@@ -209,7 +209,7 @@ async def score_request(message: types.Message):
     try:
         user = models.User.get(chat_id=chat_id)
     except:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=BOT_USERNAME))
         return
 
     data = await unlock_api.get_balance(user.id)
@@ -223,7 +223,7 @@ async def daily_report(message: types.Message):
     try:
         user = models.User.get(chat_id=chat_id)
     except:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=BOT_USERNAME))
         return
     # do magic with api
     data = await unlock_api.events_today(user.id)
@@ -239,7 +239,7 @@ async def team_report(message: types.Message):
     try:
         user = models.User.get(chat_id=chat_id)
     except:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=BOT_USERNAME))
         return
 
     try:
@@ -261,7 +261,7 @@ async def qr_request(message: types.Message):
     try:
         user = models.User.get(chat_id=chat_id)
     except:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=BOT_USERNAME))
         return
 
     await bot.send_message(chat_id, messages.qr_code_view, reply_markup=km.getQRViewKeyboard())
@@ -272,7 +272,7 @@ async def turn_on_admin_button(message: types.Message):
     try:
         user: models.User = models.User.get(models.User.chat_id == chat_id)
     except:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=BOT_USERNAME))
         return
 
     user.admin_mode = True
@@ -287,7 +287,7 @@ async def turn_off_admin_button(message: types.Message):
     try:
         user: models.User = models.User.get(models.User.chat_id == chat_id)
     except:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=BOT_USERNAME))
         return
     user.admin_mode = False
     user.save()
@@ -307,7 +307,7 @@ async def back_button(message: types.Message):
     try:
         user = models.User.get(chat_id=chat_id)
     except:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=BOT_USERNAME))
         return
     await bot.send_message(message.chat.id, messages.ok_message,
                            reply_markup=km.getMainKeyboard(user))
