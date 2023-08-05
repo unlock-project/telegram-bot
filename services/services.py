@@ -208,4 +208,5 @@ def task_done_callback(task: asyncio.Task):
         else:
             f_ex = exception
             payload = {"from": "task"}
+        logging.error(str(exception))
         asyncio.get_running_loop().create_task(log_error(f_ex, payload))
