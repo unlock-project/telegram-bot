@@ -14,7 +14,7 @@ class UserSchema(BaseModel):
     first_name: constr(max_length=150) = Field(..., title='First Name')
     last_name: constr(max_length=150) = Field(..., title='Last Name')
     qr: constr(max_length=100) = Field(..., title='Qr')
-    team: int = Field()
+    team: Optional[int] = Field(None, title='Team')
 
 
 class BotRegisterSchema(BaseModel):
