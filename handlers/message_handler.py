@@ -52,8 +52,12 @@ async def start(message: types.Message):
         return
     except:
         logging.info(f"User ({args}, {username if username is not None else ''}, {message.chat.id}) tries to log in")
-
-    user_data = await unlock_api.register_user(username)
+    try:
+        user_data = await unlock_api.register_user(username)
+    except Exception as ex:
+        logging.error(str(ex))
+        await bot.send_message(message.chat.id, messages.user_not_found)
+        return
     logging.info(f"New user with data: {user_data}")
 
     user = models.User.create(chat_id=message.chat.id, id=user_data.id, first_name=user_data.first_name,
