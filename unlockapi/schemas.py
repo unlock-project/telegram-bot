@@ -23,7 +23,7 @@ class BotRegisterSchema(BaseModel):
 
 class TeamSchema(BaseModel):
     name: constr(max_length=100) = Field(..., title='Name')
-    balance: int = Field(..., title='Balance')
+    balance: float = Field(..., title='Balance')
     tutor: int = Field(..., title='Tutor')
 
 
