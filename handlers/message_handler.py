@@ -231,7 +231,13 @@ async def daily_report(message: types.Message):
         await bot.send_message(chat_id, messages.not_met.format(bot=settings.BOT_USERNAME))
         return
     # do magic with api
-    data = await unlock_api.events_today(user.id)
+    try:
+        data = await unlock_api.events_today(user.id)
+    except Exception as ex:
+        logging.error(str(ex))
+        await bot.send_message(chat_id, messages.no_event_today)
+        return
+
     if not data.message:
         await bot.send_message(chat_id, messages.no_event_today)
         return
