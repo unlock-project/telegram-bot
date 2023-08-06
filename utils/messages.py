@@ -96,6 +96,7 @@ banned_user = "Вас забанил {admin_name}! Я теперь не могу
 unbanned_user = "Вас разбанил {admin_name}! Я теперь могу принимать от тебя сообщения :-)"
 already_banned = "Этот пользователь уже забанен"
 not_banned = "Этот пользователь не забанен"
+team_not_found = "Команда не найдена"
 
 # Phrases in buttons
 
@@ -119,3 +120,4 @@ stop_tunnel = "Отключиться"
 go_to_web = "Перейти" # Not used in production
 open_scanner = "Открыть сканер"
 see_qr = "Посмотреть"
+

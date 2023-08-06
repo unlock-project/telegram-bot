@@ -13,18 +13,18 @@ from utils.settings import UNLOCK_API_URL
 
 def getTestQRScannerKeyboard():
     kb = InlineKeyboardMarkup()
-    kb.add(InlineKeyboardButton(messages.go_to_web, web_app=WebAppInfo(url=f'{UNLOCK_API_URL}bot/scanner')))
+    kb.add(InlineKeyboardButton(messages.go_to_web, web_app=WebAppInfo(url=f'{UNLOCK_API_URL}/bot/scanner')))
     return kb
 
 def getQRScannerKeyboard(event_id: int):
     kb = InlineKeyboardMarkup()
     kb.add(InlineKeyboardButton(messages.open_scanner,
-                                web_app=WebAppInfo(url=f'{UNLOCK_API_URL}bot/scanner?event_id={event_id}')))
+                                web_app=WebAppInfo(url=f'{UNLOCK_API_URL}/bot/scanner?event_id={event_id}')))
     return kb
 
 def getQRViewKeyboard():
     kb = InlineKeyboardMarkup()
-    kb.add(InlineKeyboardButton(messages.see_qr, web_app=WebAppInfo(url=f'{UNLOCK_API_URL}bot/qr')))
+    kb.add(InlineKeyboardButton(messages.see_qr, web_app=WebAppInfo(url=f'{UNLOCK_API_URL}/bot/qr')))
     return kb
 
 

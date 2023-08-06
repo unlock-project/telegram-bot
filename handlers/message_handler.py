@@ -11,6 +11,7 @@ import keyboard as km
 import services
 from instances import dp, bot, unlock_api
 from states import UserState, InTunnelData
+from unlockapi.errors import ResponseException
 from utils import models, messages
 from utils.models import User
 from utils.my_filters import IsAdmin
@@ -176,7 +177,11 @@ async def answer_question(message: types.Message, state: FSMContext):
     message_id = state_data["message_id"]
     await state.finish()
     user = models.User.get((models.User.chat_id == message.chat.id))
-    data = (await unlock_api.question_answer(question_id, user.id, answer))
+    try:
+        data = (await unlock_api.question_answer(question_id, user.id, answer))
+    except Exception as ex:
+        await bot.send_message(message.chat.id, messages.error_message)
+        raise ex
     await bot.send_message(message.chat.id, data.text)
     await bot.edit_message_reply_markup(message.chat.id, message_id, reply_markup='')
 
@@ -196,8 +201,11 @@ async def promocode_enter(message: types.Message, state: FSMContext):
     if user is None:
         await bot.send_message(chat_id, messages.not_met.format(bot=settings.BOT_USERNAME))
         return
-
-    result = await unlock_api.promo_activate(promocode, user.id)
+    try:
+        result = await unlock_api.promo_activate(promocode, user.id)
+    except Exception as ex:
+        await bot.send_message(message.chat.id, messages.error_message)
+        raise ex
     await bot.send_message(chat_id, result.text)
 
 
@@ -217,7 +225,11 @@ async def score_request(message: types.Message):
         await bot.send_message(chat_id, messages.not_met.format(bot=settings.BOT_USERNAME))
         return
 
-    data = await unlock_api.get_balance(user.id)
+    try:
+        data = await unlock_api.get_balance(user.id)
+    except Exception as ex:
+        await bot.send_message(message.chat.id, messages.error_message)
+        raise ex
     await bot.send_message(chat_id, messages.score_message.format(score=data.balance))
 
 
@@ -233,10 +245,16 @@ async def daily_report(message: types.Message):
     # do magic with api
     try:
         data = await unlock_api.events_today(user.id)
+    except ResponseException as ex:
+        if ex.status_code == 404 and ex.has_reason:
+            await bot.send_message(chat_id, messages.no_event_today)
+            return
+        else:
+            await bot.send_message(message.chat.id, messages.error_message)
+            raise ex
     except Exception as ex:
-        logging.error(str(ex))
-        await bot.send_message(chat_id, messages.no_event_today)
-        return
+        await bot.send_message(message.chat.id, messages.error_message)
+        raise ex
 
     if not data.message:
         await bot.send_message(chat_id, messages.no_event_today)
@@ -255,15 +273,22 @@ async def team_report(message: types.Message):
 
     try:
         data = await unlock_api.user_team(user.id)
-    
-        tutor: User = models.User.get_or_none(id=data.tutor)
-    
-        await bot.send_message(chat_id, messages.team_message.format(name=data.name, score=data.balance,
-                                                                     tutor='' if tutor is None else f"{tutor.first_name} "
-                                                                                                    f"{tutor.last_name}"))
+    except ResponseException as ex:
+        if ex.status_code == 404 and ex.has_reason:
+            await bot.send_message(chat_id, messages.team_not_found)
+            return
+        else:
+            await bot.send_message(message.chat.id, messages.error_message)
+            raise ex
     except Exception as ex:
-        logging.error(str(ex))
-        await bot.send_message(chat_id, "Команда не найдена")
+        await bot.send_message(message.chat.id, messages.error_message)
+        raise ex
+
+    tutor: User = models.User.get_or_none(id=data.tutor)
+
+    await bot.send_message(chat_id, messages.team_message.format(name=data.name, score=data.balance,
+                                                                 tutor='' if tutor is None else f"{tutor.first_name} "
+                                                                                                f"{tutor.last_name}"))
 
 @dp.message_handler(filters.Text(equals=messages.qr_request))
 async def qr_request(message: types.Message):

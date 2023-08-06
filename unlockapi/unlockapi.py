@@ -1,10 +1,12 @@
+import logging
+
 import aiohttp
 import pydantic
 import requests
 
 from unlockapi import schemas
 from .methods import APIMethods
-
+from .errors import ResponseException
 
 class UnlockAPI:
     url = ''
@@ -32,7 +34,7 @@ class UnlockAPI:
                         raise TypeError(f"Non-json response ({resp.content_type}) in function {function.value}")
                     return await resp.json()
                 else:
-                    raise TypeError(f"Response status {resp.status} in function {function.value}")
+                    raise ResponseException(resp, await resp.content.read())
         except requests.exceptions.ConnectTimeout as ex:
             logging.error(str(ex))
             raise ex
@@ -52,7 +54,7 @@ class UnlockAPI:
                         raise TypeError(f"Non-json response ({resp.content_type}) in function {function.value}")
                     return await resp.json()
                 else:
-                    raise TypeError(f"Response status {resp.status} in function {function.value}")
+                    raise ResponseException(resp)
         except requests.exceptions.ConnectTimeout as ex:
             logging.error(str(ex))
             raise ex
