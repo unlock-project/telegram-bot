@@ -286,7 +286,7 @@ async def team_report(message: types.Message):
 
     tutor: User = models.User.get_or_none(id=data.tutor)
 
-    await bot.send_message(chat_id, messages.team_message.format(name=data.name, score=data.balance,
+    await bot.send_message(chat_id, messages.team_message.format(name=data.name, score=round(data.balance, 1),
                                                                  tutor='' if tutor is None else f"{tutor.first_name} "
                                                                                                 f"{tutor.last_name}"))
 
