@@ -117,6 +117,15 @@ class TestThrottledTask(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(2, task.attempts())
         self.assertEqual(10000, task.next_attempt())
 
+    async def test_next_attempt(self):
+        tracker = Tracker()
+        task = ThrottledTask(retry_after(tracker, 2000, attempts=3))
+        task.schedule(asyncio.get_running_loop())
+        await asyncio.sleep(1.5)
+        task.cancel()
+        self.assertGreater(1000, task.next_attempt())
+        self.assertGreater(task.next_attempt(), 0)
+
 
 class TestLatestThrottledExecutor(unittest.IsolatedAsyncioTestCase):
 
