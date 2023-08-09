@@ -117,12 +117,20 @@ async def update_registration(msg_id: int, registration_id: int, option_id: int,
 
 
     keyboard = km.getRegistrationKeyboard(registration.registration_id, mapped_options)
-    try:
-        result = await bot.edit_message_reply_markup(CHANNEL_ID, msg_id, reply_markup=keyboard)
-    except aiogram.utils.exceptions.MessageNotModified as ex:
-        logging.warning(str(ex))
-    except Exception as ex:
-        raise ex
+    successful = False
+    counter = 0
+    while not successful and counter < 20:
+        await asyncio.sleep(0.040)  # not more than 30 per second (25)
+        successful = True
+        try:
+            counter += 1
+            result = await bot.edit_message_reply_markup(CHANNEL_ID, msg_id, reply_markup=keyboard)
+        except aiogram.utils.exceptions.MessageNotModified as ex:
+            logging.warning(str(ex))
+        except aiogram.utils.exceptions.RetryAfter as ex:
+            await asyncio.sleep(ex.timeout)
+            successful = False
+
 
 
 

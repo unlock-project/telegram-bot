@@ -1,3 +1,4 @@
+import asyncio
 import json
 
 from aiogram import types
@@ -69,8 +70,8 @@ async def make_choice_event(callback: types.CallbackQuery):
 
     data = await unlock_api.registration_choose(registration.registration_id, user.id, option["option_id"])
 
-    await services.update_registration(callback.message.message_id, registration.registration_id, data.option_id,
-                                 data.new_text)
-
 
     await bot.answer_callback_query(callback.id, data.message, show_alert=True)
+    asyncio.get_running_loop().create_task(services.update_registration(callback.message.message_id, registration.registration_id, data.option_id,
+                                 data.new_text)) \
+        .add_done_callback(services.services.task_done_callback)
