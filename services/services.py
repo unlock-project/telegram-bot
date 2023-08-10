@@ -15,6 +15,8 @@ import keyboard as km
 import schemas
 import utils.settings
 from instances import bot
+from lib.function_wrapper import supervised
+from lib.latest_throttled_executor import RetryAfterException
 from utils import models, messages
 from utils.models import Registration
 from utils.settings import CHANNEL_ID, UNLOCK_API_TOKEN, UNLOCK_API_URL
@@ -105,6 +107,7 @@ async def update_option(options: list[dict], option_id: int, new_option_text: st
             option['option_text'] = new_option_text
     return options
 
+@supervised
 async def update_registration(msg_id: int, registration_id: int, option_id: int, option_text: str) -> int:
     registration = Registration.get_or_none(Registration.registration_id==registration_id)
     options = await update_option(registration.options, option_id, option_text)
@@ -117,20 +120,13 @@ async def update_registration(msg_id: int, registration_id: int, option_id: int,
 
 
     keyboard = km.getRegistrationKeyboard(registration.registration_id, mapped_options)
-    successful = False
-    counter = 0
-    while not successful and counter < 20:
-        await asyncio.sleep(0.040)  # not more than 30 per second (25)
-        successful = True
-        try:
-            counter += 1
-            result = await bot.edit_message_reply_markup(CHANNEL_ID, msg_id, reply_markup=keyboard)
-        except aiogram.utils.exceptions.MessageNotModified as ex:
-            logging.warning(str(ex))
-        except aiogram.utils.exceptions.RetryAfter as ex:
-            await asyncio.sleep(ex.timeout)
-            successful = False
 
+    try:
+        await bot.edit_message_reply_markup(CHANNEL_ID, msg_id, reply_markup=keyboard)
+    except aiogram.utils.exceptions.MessageNotModified as ex:
+        logging.warning(str(ex))
+    except aiogram.utils.exceptions.RetryAfter as ex:
+        raise RetryAfterException(ex.timeout * 1000)
 
 
 
