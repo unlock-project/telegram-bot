@@ -72,3 +72,11 @@ class ChoiceBotSchema(BaseModel):
     vote_id: int = Field(..., title='Vote Id')
     user_id: int = Field(..., title='User Id')
     option_id: int = Field(..., title='Option Id')
+
+class ReportSchema(BaseModel):
+    user_id: int = Field(...)
+    report_text: str = Field(...)
+
+class ReportResponse(BaseModel):
+    report_id: int = Field(...)
+    report_status: str = Field(...)

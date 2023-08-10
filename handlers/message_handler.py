@@ -78,6 +78,28 @@ async def clear_keyboard(message: types.Message):
                            reply_markup=types.reply_keyboard.ReplyKeyboardRemove())
 
 
+@dp.message_handler(commands='report')
+async def report_message(message: types.Message):
+    text = message.get_args()
+    user: User = User.get_or_none(chat_id=message.chat.id)
+
+    if user is None:
+        await bot.send_message(message.chat.id, messages.not_met.format(bot=settings.BOT_USERNAME))
+        return
+
+    if not text:
+        await bot.send_message(message.chat.id, messages.enter_text)
+        return
+
+    # sent to back
+    data = await unlock_api.report(user.id, text)
+
+    await bot.send_message(settings.SUPER_ADMIN, messages.new_report.format(report_id=data.report_id,
+                                                                            report_text=text))
+    await bot.send_message(message.chat.id, messages.report_sent.format(report_id=data.report_id))
+
+
+
 @dp.message_handler(IsAdmin(), commands="raise")
 async def raise_error(message: types.Message):
     args = message.get_args()
