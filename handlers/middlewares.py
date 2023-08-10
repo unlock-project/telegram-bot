@@ -55,14 +55,10 @@ class ThrottlingMiddleware(BaseMiddleware):
             key = f"{self.prefix}_message"
 
         # Use Dispatcher.throttle method.
-        print(limit)
         try:
-            print("throttling")
             await dp.throttle(key, rate=limit)
-            print("not throttled")
         except Throttled as t:
             # Execute action
-            print("throttled")
             await message.reply(messages.throttled)
 
             # Cancel current handler

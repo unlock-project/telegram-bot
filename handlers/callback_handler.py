@@ -4,6 +4,7 @@ import json
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
+import instances
 import services
 from instances import dp, bot, unlock_api
 from lib.latest_throttled_executor import LatestThrottledExecutor
@@ -13,7 +14,6 @@ from utils.models import Vote, Registration, User
 from utils.my_filters import CallbackType
 from utils import settings
 
-latest_throttled_executor = LatestThrottledExecutor(asyncio.get_running_loop())
 
 
 @dp.callback_query_handler(CallbackType("vote"))
@@ -77,7 +77,7 @@ async def make_choice_event(callback: types.CallbackQuery):
 
     await bot.answer_callback_query(callback.id, data.message, show_alert=True)
 
-    latest_throttled_executor.enqueue(
+    instances.latest_throttled_executor.enqueue(
         services.update_registration(
             callback.message.message_id,
             registration.registration_id,
