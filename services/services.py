@@ -125,7 +125,6 @@ async def update_registration(msg_id: int, registration_id: int, option_id: int,
         await bot.edit_message_reply_markup(CHANNEL_ID, msg_id, reply_markup=keyboard)
     except aiogram.utils.exceptions.MessageNotModified as ex:
         logging.warning(str(ex))
-        raise RetryAfterException(500)
     except aiogram.utils.exceptions.RetryAfter as ex:
         raise RetryAfterException(ex.timeout * 1000)
 
