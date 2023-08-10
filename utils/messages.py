@@ -97,6 +97,9 @@ unbanned_user = "Вас разбанил {admin_name}! Я теперь могу 
 already_banned = "Этот пользователь уже забанен"
 not_banned = "Этот пользователь не забанен"
 team_not_found = "Команда не найдена"
+report_sent = "Ваше обращение с номером <b><i>{report_id}</i></b> отправлено. Ожидайте ответа от разработчиков."
+enter_text = "Введите текст, который хотите отправить разработчикам."
+new_report = "НОВЫЙ РЕПОРТ!\nНомер - <code>{report_id}</code>\n\n <code>{report_text}</code>"
 
 # Phrases in buttons
 

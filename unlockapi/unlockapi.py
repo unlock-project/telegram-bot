@@ -96,6 +96,11 @@ class UnlockAPI:
         data = await self._get(APIMethods.USER_BALANCE, {'user_id': user_id})
         return schemas.BalanceSchema(**data)
 
+    async def report(self, user_id: int, report_text: str):
+        data = await self._post(APIMethods.REPORT, schemas.ReportSchema(user_id=user_id, report_text=report_text))
+
+        return schemas.ReportResponse(**data)
+
     async def close(self):
         if self.__session is not None:
             await self.__session.close()
