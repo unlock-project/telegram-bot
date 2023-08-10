@@ -1,9 +1,12 @@
+import logging
+
 import aiohttp
 import pydantic
+import requests
 
 from unlockapi import schemas
 from .methods import APIMethods
-
+from .errors import ResponseException
 
 class UnlockAPI:
     url = ''
@@ -15,10 +18,11 @@ class UnlockAPI:
         self.url = url
         self.__session = None
         self.__token = token
+        self.__timeout = timeout = aiohttp.ClientTimeout(total=10)
 
     async def _get(self, function: APIMethods, params=None):
         if not self.__session:
-            self.__session = aiohttp.ClientSession(base_url=self.url, connector=aiohttp.TCPConnector(verify_ssl=False))
+            self.__session = aiohttp.ClientSession(base_url=self.url, connector=aiohttp.TCPConnector(verify_ssl=False), timeout=self.__timeout)
         if params is None:
             params = {}
         params['token'] = self.__token
@@ -30,24 +34,31 @@ class UnlockAPI:
                         raise TypeError(f"Non-json response ({resp.content_type}) in function {function.value}")
                     return await resp.json()
                 else:
-                    raise TypeError(f"Response status {resp.status} in function {function.value}")
-        except:
+                    raise ResponseException(resp, await resp.content.read())
+        except requests.exceptions.ConnectTimeout as ex:
+            logging.error(str(ex))
+            raise ex
             return None
 
     async def _post(self, function: APIMethods, body: pydantic.BaseModel):
         if not self.__session:
-            self.__session = aiohttp.ClientSession(base_url=self.url, connector=aiohttp.TCPConnector(verify_ssl=False))
+            self.__session = aiohttp.ClientSession(base_url=self.url, connector=aiohttp.TCPConnector(verify_ssl=False), timeout=self.__timeout)
         if body is None:
             body = {}
-        async with self.__session.post(
-                function.value, data=body.json(), headers={'content-type': 'application/json'},
-                params={'token': self.__token}) as resp:
-            if resp.status == 200:
-                if resp.content_type != 'application/json':
-                    raise TypeError(f"Non-json response ({resp.content_type}) in function {function.value}")
-                return await resp.json()
-            else:
-                raise TypeError(f"Response status {resp.status} in function {function.value}")
+        try:
+            async with self.__session.post(
+                    function.value, data=body.json(), headers={'content-type': 'application/json'},
+                    params={'token': self.__token}) as resp:
+                if resp.status == 200:
+                    if resp.content_type != 'application/json':
+                        raise TypeError(f"Non-json response ({resp.content_type}) in function {function.value}")
+                    return await resp.json()
+                else:
+                    raise ResponseException(resp)
+        except requests.exceptions.ConnectTimeout as ex:
+            logging.error(str(ex))
+            raise ex
+            return None
 
     async def register_user(self, username: str):
         data = await self._post(APIMethods.REGISTER_USER, schemas.BotRegisterSchema(username=username))
@@ -84,6 +95,11 @@ class UnlockAPI:
     async def get_balance(self, user_id: int):
         data = await self._get(APIMethods.USER_BALANCE, {'user_id': user_id})
         return schemas.BalanceSchema(**data)
+
+    async def report(self, user_id: int, report_text: str):
+        data = await self._post(APIMethods.REPORT, schemas.ReportSchema(user_id=user_id, report_text=report_text))
+
+        return schemas.ReportResponse(**data)
 
     async def close(self):
         if self.__session is not None:

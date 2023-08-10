@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 import aiogram
@@ -6,6 +7,7 @@ from aiogram.dispatcher.webhook import get_new_configured_app
 from aiohttp import web
 
 import instances
+from lib.latest_throttled_executor import LatestThrottledExecutor
 from utils.models import connect, cleanup
 from utils.settings import WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT, WEBHOOK_URL, \
     API_PATH, SKIP_UPDATES
@@ -28,6 +30,9 @@ class AppBundle:
                 logging.info("Webhook set")
             else:
                 logging.critical("Webhook didn't set")
+
+            if instances.latest_throttled_executor is None:
+                instances.latest_throttled_executor = LatestThrottledExecutor(asyncio.get_running_loop())
 
         async def on_shutdown(*args, **kwargs):
             logging.warning('Shutting down..')

@@ -30,6 +30,8 @@ async def register_bot(_bot: aiogram.Bot):
     settings.BOT_USERNAME = (await _bot.get_me()).username
 
 if __name__ == "__main__":
-    asyncio.run(register_bot(bot))
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(register_bot(bot))
+    print(settings.BOT_USERNAME)
     app.run(bot, dp, routes)
 

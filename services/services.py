@@ -15,9 +15,11 @@ import keyboard as km
 import schemas
 import utils.settings
 from instances import bot
+from lib.function_wrapper import supervised
+from lib.latest_throttled_executor import RetryAfterException
 from utils import models, messages
 from utils.models import Registration
-from utils.settings import CHANNEL_ID, UNLOCK_API_TOKEN
+from utils.settings import CHANNEL_ID, UNLOCK_API_TOKEN, UNLOCK_API_URL
 
 
 class InTaskException(Exception):
@@ -105,6 +107,7 @@ async def update_option(options: list[dict], option_id: int, new_option_text: st
             option['option_text'] = new_option_text
     return options
 
+@supervised
 async def update_registration(msg_id: int, registration_id: int, option_id: int, option_text: str) -> int:
     registration = Registration.get_or_none(Registration.registration_id==registration_id)
     options = await update_option(registration.options, option_id, option_text)
@@ -117,12 +120,13 @@ async def update_registration(msg_id: int, registration_id: int, option_id: int,
 
 
     keyboard = km.getRegistrationKeyboard(registration.registration_id, mapped_options)
+
     try:
-        result = await bot.edit_message_reply_markup(CHANNEL_ID, msg_id, reply_markup=keyboard)
+        await bot.edit_message_reply_markup(CHANNEL_ID, msg_id, reply_markup=keyboard)
     except aiogram.utils.exceptions.MessageNotModified as ex:
         logging.warning(str(ex))
-    except Exception as ex:
-        raise ex
+    except aiogram.utils.exceptions.RetryAfter as ex:
+        raise RetryAfterException(ex.timeout * 1000)
 
 
 
@@ -189,13 +193,13 @@ async def validate_user(init_data, c_str="WebAppData"):
 async def log_error(error, update):
     report = catcher.collect(error)
     html = catcher.formatters.HTMLFormatter().format(report, maxdepth=1)
-    result = requests.post("https://cdm.sumjest.ru/bot/api/error", params={'token': UNLOCK_API_TOKEN},
+    result = requests.post(f"{UNLOCK_API_URL}/bot/api/error", params={'token': UNLOCK_API_TOKEN},
                            data={'data': str(update)}, files={'traceback': html})
     if result.ok:
         result_data = result.json()
         await bot.send_message(utils.settings.SUPER_ADMIN, messages.error_report
                                .format(error_id=result_data["error_id"],
-                                       error_url=f'https://cdm.sumjest.ru{result_data["error_url"]}'))
+                                       error_url=f'{UNLOCK_API_URL}{result_data["error_url"]}'))
 
 
 def task_done_callback(task: asyncio.Task):
@@ -208,4 +212,5 @@ def task_done_callback(task: asyncio.Task):
         else:
             f_ex = exception
             payload = {"from": "task"}
+        logging.error(str(exception))
         asyncio.get_running_loop().create_task(log_error(f_ex, payload))
