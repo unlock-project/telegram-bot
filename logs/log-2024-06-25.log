@@ -1,0 +1,81 @@
+2024-06-25 15:55:05,028 [INFO] Setting webhook
+2024-06-25 15:55:20,306 [INFO] Webhook set
+2024-06-25 15:55:35,086 [INFO] 127.0.0.1 [25/Jun/2024:10:55:33 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:01:12,810 [INFO] 127.0.0.1 [25/Jun/2024:11:01:12 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:01:17,237 [INFO] 127.0.0.1 [25/Jun/2024:11:01:17 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:01:21,798 [INFO] 127.0.0.1 [25/Jun/2024:11:01:21 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:01:23,783 [INFO] 127.0.0.1 [25/Jun/2024:11:01:23 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:01:28,898 [ERROR] Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 257, in process_update
+    return await self.message_handlers.notify(update.message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 333, in qr_request
+    await bot.send_message(chat_id, messages.qr_code_view, reply_markup=km.getQRViewKeyboard())
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\bot.py", line 346, in send_message
+    result = await self.request(api.Methods.SEND_MESSAGE, payload)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\base.py", line 236, in request
+    return await api.make_request(await self.get_session(), self.server, self.__token, method, data, files,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\api.py", line 140, in make_request
+    return check_result(method, response.content_type, response.status, await response.text())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\api.py", line 115, in check_result
+    exceptions.BadRequest.detect(description)
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\utils\exceptions.py", line 141, in detect
+    raise cls(description)
+aiogram.utils.exceptions.BadRequest: Inline keyboard button web app url 'http://127.0.0.1:8000/bot/qr' is invalid: only https links are allowed
+
+2024-06-25 16:01:30,542 [INFO] 127.0.0.1 [25/Jun/2024:11:01:28 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:01:32,449 [INFO] 127.0.0.1 [25/Jun/2024:11:01:32 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:01:37,244 [INFO] 127.0.0.1 [25/Jun/2024:11:01:36 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:01:38,997 [INFO] 127.0.0.1 [25/Jun/2024:11:01:38 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:54:42,830 [INFO] 127.0.0.1 [25/Jun/2024:11:54:41 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:54:43,338 [INFO] 127.0.0.1 [25/Jun/2024:11:54:43 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:54:51,513 [ERROR] Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 257, in process_update
+    return await self.message_handlers.notify(update.message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 311, in team_report
+    raise ex
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 304, in team_report
+    data = await unlock_api.user_team(user.id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\unlockapi\unlockapi.py", line 72, in user_team
+    data = await self._get(APIMethods.USER_TEAM, {"user_id": user_id})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\unlockapi\unlockapi.py", line 38, in _get
+    raise ResponseException(resp, await resp.content.read())
+unlockapi.errors.ResponseException: 'http://127.0.0.1:8000/api/users/team?user_id=4&token=dfa185bd24f7b77ee1b74fe9f841adf7' returned 500.
+
+2024-06-25 16:54:51,587 [INFO] 127.0.0.1 [25/Jun/2024:11:54:51 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:54:57,565 [INFO] 127.0.0.1 [25/Jun/2024:11:54:57 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:54:59,265 [INFO] 127.0.0.1 [25/Jun/2024:11:54:58 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:55:00,680 [ERROR] Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 257, in process_update
+    return await self.message_handlers.notify(update.message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 311, in team_report
+    raise ex
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 304, in team_report
+    data = await unlock_api.user_team(user.id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\unlockapi\unlockapi.py", line 72, in user_team
+    data = await self._get(APIMethods.USER_TEAM, {"user_id": user_id})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\unlockapi\unlockapi.py", line 38, in _get
+    raise ResponseException(resp, await resp.content.read())
+unlockapi.errors.ResponseException: 'http://127.0.0.1:8000/api/users/team?user_id=4&token=dfa185bd24f7b77ee1b74fe9f841adf7' returned 500.
+
+2024-06-25 16:55:00,745 [INFO] 127.0.0.1 [25/Jun/2024:11:55:00 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:55:18,875 [INFO] 127.0.0.1 [25/Jun/2024:11:55:18 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-25 16:55:40,611 [INFO] 127.0.0.1 [25/Jun/2024:11:55:40 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"

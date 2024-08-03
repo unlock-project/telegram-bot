@@ -12,10 +12,13 @@ from utils.my_filters import IsAdmin
 from utils import settings
 from utils.settings import LOGS_PATH
 
+
 dp.filters_factory.bind(IsAdmin)
+
 
 if not os.path.exists(LOGS_PATH):
     os.mkdir(LOGS_PATH)
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -26,8 +29,10 @@ logging.basicConfig(
     ]
 )
 
+
 async def register_bot(_bot: aiogram.Bot):
     settings.BOT_USERNAME = (await _bot.get_me()).username
+
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()

@@ -1,24 +1,76 @@
-version: '1.0'
+version: '3.8'
+
 services:
   postgres:
     image: postgres:13.3
-    env_file:
-      - "postgres.env"
+    environment:
+      POSTGRES_USER: unlock
+      POSTGRES_PASSWORD: somerandomgeneratedpassword
+      POSTGRES_DB: unlock
     volumes:
-       - postgres:/data/postgres
+      - postgres:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     container_name: unlock_pgdb
-  unlock-bot:
-    image: romaaaka/unlockbot:v1-prod
-    command: "python unlockbot.py"
-    ports:
-      - "8001:8001"
-    env_file:
-      - ".env"
+
+  unlock_backend:
+    image: dmitriylos7/admin:latest
+    restart: unless-stopped
+    command: "gunicorn -c gunicorn.py unlock.wsgi"
+    environment:
+      - UNLOCK_ALLOWED_HOSTS=localhost
+      - UNLOCK_DEBUG=false
+      - UNLOCK_SECRET_KEY=django-insecure-os3t!!+f#38$+qjnbi&s8+grifdw!k^bv83r545w1f)ni#k3^b
+      - UNLOCK_BOT_URL=http://nginx/api
+      - UNLOCK_DATABASE=postgres
+      - UNLOCK_DATABASE_HOST=postgres
+      - UNLOCK_DATABASE_PORT=5432
+      - UNLOCK_DATABASE_NAME=unlock
+      - UNLOCK_DATABASE_USER=unlock
+      - UNLOCK_CSRF_TRUSTED_ORIGINS=http://localhost
+      - UNLOCK_DATABASE_PASSWORD=somerandomgeneratedpassword
     depends_on:
       - postgres
+    ports:
+      - "8002:8000"
     volumes:
-      - C:\home\unlock\telegram-bot\logs:/app/logs
+      - ./static:/app/static
+      - ./tracebacks:/app/templates/tracebacks
+
+  unlock_bot:
+    image: dmitriylos7/bot:latest
+    restart: unless-stopped
+    command: "python unlockbot.py"
+    environment:
+      - BOT_TOKEN=6598300458:AAEArdJu0NUkPefENiWEMUU0M2N3ZaBqsxw
+      - SUPER_ADMIN=1297670600
+      - CHANNEL_ID=-4260668781
+      - DB_HOST=postgres
+      - DB_NAME=unlock_bot
+      - DB_PASS=somerandomgeneratedpassword
+      - DB_PORT=5432
+      - DB_USER=unlock
+      - SKIP_UPDATES=1
+      - UNLOCK_API_URL=http://nginx/api/
+      - WEBHOOK_HOST=http://unlock-bot.local
+      - WEBAPP_PORT=8001
+      - UNLOCK_API_TOKEN=dfa185bd24f7b77ee1b74fe9f841adf7
+    depends_on:
+      - postgres
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./logs/unlock_bot:/app/logs
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - unlock_backend
+      - unlock_bot
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+
 volumes:
   postgres:

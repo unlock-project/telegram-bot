@@ -1,0 +1,340 @@
+2024-06-20 23:30:13,443 [INFO] Setting webhook
+2024-06-20 23:30:13,793 [INFO] Webhook set
+2024-06-20 23:30:16,184 [ERROR] Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 980, in _wrap_create_connection
+    return await self._loop.create_connection(*args, **kwargs)  # type: ignore[return-value]  # noqa
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 1086, in create_connection
+    raise exceptions[0]
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 1070, in create_connection
+    sock = await self._connect_sock(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 974, in _connect_sock
+    await self.sock_connect(sock, address)
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\proactor_events.py", line 726, in sock_connect
+    return await self._proactor.connect(sock, address)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\windows_events.py", line 854, in _poll
+    value = callback(transferred, key, ov)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\windows_events.py", line 641, in finish_connect
+    ov.getresult()
+ConnectionRefusedError: [WinError 1225] The remote computer refused the network connection
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 257, in process_update
+    return await self.message_handlers.notify(update.message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 260, in score_request
+    raise ex
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 257, in score_request
+    data = await unlock_api.get_balance(user.id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\unlockapi\unlockapi.py", line 106, in get_balance
+    data = await self._get(APIMethods.USER_BALANCE, {'user_id': user_id})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\unlockapi\unlockapi.py", line 31, in _get
+    async with self.__session.get(
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\client.py", line 1167, in __aenter__
+    self._resp = await self._coro
+                 ^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\client.py", line 562, in _request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 540, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 901, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 1209, in _create_direct_connection
+    raise last_exc
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 1178, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 988, in _wrap_create_connection
+    raise client_error(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host 127.0.0.1:8000 ssl:default [The remote computer refused the network connection]
+
+2024-06-20 23:30:18,326 [ERROR] HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /bot/api/error?token=dfa185bd24f7b77ee1b74fe9f841adf7 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E5032E1C90>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2024-06-20 23:30:18,326 [INFO] 127.0.0.1 [20/Jun/2024:18:30:13 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:30:20,397 [ERROR] Task exception was never retrieved
+future: <Task finished name='Task-16' coro=<log_error() done, defined at D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\services\services.py:193> exception=ConnectionError(MaxRetryError("HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /bot/api/error?token=dfa185bd24f7b77ee1b74fe9f841adf7 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E50332B190>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))"))>
+Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connectionpool.py", line 793, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connectionpool.py", line 496, in _make_request
+    conn.request(
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connection.py", line 400, in request
+    self.endheaders()
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1298, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1058, in _send_output
+    self.send(msg)
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 996, in send
+    self.connect()
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connection.py", line 238, in connect
+    self.sock = self._new_conn()
+                ^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connection.py", line 213, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x000001E50332B190>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connectionpool.py", line 847, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\util\retry.py", line 515, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /bot/api/error?token=dfa185bd24f7b77ee1b74fe9f841adf7 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E50332B190>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\services\services.py", line 196, in log_error
+    result = requests.post(f"{UNLOCK_API_URL}/bot/api/error", params={'token': UNLOCK_API_TOKEN},
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /bot/api/error?token=dfa185bd24f7b77ee1b74fe9f841adf7 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E50332B190>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2024-06-20 23:30:22,745 [ERROR] Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 980, in _wrap_create_connection
+    return await self._loop.create_connection(*args, **kwargs)  # type: ignore[return-value]  # noqa
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 1086, in create_connection
+    raise exceptions[0]
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 1070, in create_connection
+    sock = await self._connect_sock(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 974, in _connect_sock
+    await self.sock_connect(sock, address)
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\proactor_events.py", line 726, in sock_connect
+    return await self._proactor.connect(sock, address)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\windows_events.py", line 854, in _poll
+    value = callback(transferred, key, ov)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\windows_events.py", line 641, in finish_connect
+    ov.getresult()
+ConnectionRefusedError: [WinError 1225] The remote computer refused the network connection
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 257, in process_update
+    return await self.message_handlers.notify(update.message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 285, in daily_report
+    raise ex
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 275, in daily_report
+    data = await unlock_api.events_today(user.id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\unlockapi\unlockapi.py", line 77, in events_today
+    data = await self._get(APIMethods.EVENTS_TODAY, {"user_id": user_id})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\unlockapi\unlockapi.py", line 31, in _get
+    async with self.__session.get(
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\client.py", line 1167, in __aenter__
+    self._resp = await self._coro
+                 ^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\client.py", line 562, in _request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 540, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 901, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 1209, in _create_direct_connection
+    raise last_exc
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 1178, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 988, in _wrap_create_connection
+    raise client_error(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host 127.0.0.1:8000 ssl:default [The remote computer refused the network connection]
+
+2024-06-20 23:30:24,810 [ERROR] HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /bot/api/error?token=dfa185bd24f7b77ee1b74fe9f841adf7 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E502E0C6D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2024-06-20 23:30:24,811 [INFO] 127.0.0.1 [20/Jun/2024:18:30:20 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:30:26,859 [ERROR] Task exception was never retrieved
+future: <Task finished name='Task-22' coro=<log_error() done, defined at D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\services\services.py:193> exception=ConnectionError(MaxRetryError("HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /bot/api/error?token=dfa185bd24f7b77ee1b74fe9f841adf7 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E5032F5A50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))"))>
+Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connectionpool.py", line 793, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connectionpool.py", line 496, in _make_request
+    conn.request(
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connection.py", line 400, in request
+    self.endheaders()
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1298, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1058, in _send_output
+    self.send(msg)
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 996, in send
+    self.connect()
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connection.py", line 238, in connect
+    self.sock = self._new_conn()
+                ^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connection.py", line 213, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x000001E5032F5A50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connectionpool.py", line 847, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\util\retry.py", line 515, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /bot/api/error?token=dfa185bd24f7b77ee1b74fe9f841adf7 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E5032F5A50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\services\services.py", line 196, in log_error
+    result = requests.post(f"{UNLOCK_API_URL}/bot/api/error", params={'token': UNLOCK_API_TOKEN},
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /bot/api/error?token=dfa185bd24f7b77ee1b74fe9f841adf7 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001E5032F5A50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2024-06-20 23:30:34,752 [ERROR] Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 257, in process_update
+    return await self.message_handlers.notify(update.message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 333, in qr_request
+    await bot.send_message(chat_id, messages.qr_code_view, reply_markup=km.getQRViewKeyboard())
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\bot.py", line 346, in send_message
+    result = await self.request(api.Methods.SEND_MESSAGE, payload)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\base.py", line 236, in request
+    return await api.make_request(await self.get_session(), self.server, self.__token, method, data, files,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\api.py", line 140, in make_request
+    return check_result(method, response.content_type, response.status, await response.text())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\api.py", line 115, in check_result
+    exceptions.BadRequest.detect(description)
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\utils\exceptions.py", line 141, in detect
+    raise cls(description)
+aiogram.utils.exceptions.BadRequest: Inline keyboard button web app url 'http://127.0.0.1:8000/bot/qr' is invalid: only https links are allowed
+
+2024-06-20 23:30:34,827 [INFO] 127.0.0.1 [20/Jun/2024:18:30:34 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:30:39,245 [INFO] 127.0.0.1 [20/Jun/2024:18:30:39 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:30:46,062 [INFO] 127.0.0.1 [20/Jun/2024:18:30:45 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:30:52,879 [INFO] 127.0.0.1 [20/Jun/2024:18:30:52 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:30:56,005 [INFO] 127.0.0.1 [20/Jun/2024:18:30:55 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:30:59,842 [INFO] 127.0.0.1 [20/Jun/2024:18:30:59 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:35:41,763 [INFO] 127.0.0.1 [20/Jun/2024:18:35:41 +0000] "GET /logs HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-20 23:37:54,745 [INFO] 127.0.0.1 [20/Jun/2024:18:37:54 +0000] "POST /sendmessage HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-20 23:38:01,446 [INFO] 127.0.0.1 [20/Jun/2024:18:38:01 +0000] "POST /sendmessage HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-20 23:38:11,194 [INFO] 127.0.0.1 [20/Jun/2024:18:38:11 +0000] "GET /logs HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-20 23:38:23,624 [INFO] 127.0.0.1 [20/Jun/2024:18:38:23 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:38:25,073 [INFO] 127.0.0.1 [20/Jun/2024:18:38:24 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:38:27,827 [INFO] 127.0.0.1 [20/Jun/2024:18:38:27 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:38:32,191 [INFO] 127.0.0.1 [20/Jun/2024:18:38:31 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:38:32,711 [INFO] 127.0.0.1 [20/Jun/2024:18:38:32 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:38:37,104 [INFO] 127.0.0.1 [20/Jun/2024:18:38:36 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:38:41,793 [INFO] 127.0.0.1 [20/Jun/2024:18:38:41 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:38:43,151 [INFO] 127.0.0.1 [20/Jun/2024:18:38:43 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:39:16,393 [INFO] 127.0.0.1 [20/Jun/2024:18:39:16 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:39:17,844 [INFO] 127.0.0.1 [20/Jun/2024:18:39:17 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:39:20,409 [INFO] 127.0.0.1 [20/Jun/2024:18:39:20 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:39:44,049 [INFO] 127.0.0.1 [20/Jun/2024:18:39:43 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:39:46,970 [INFO] 127.0.0.1 [20/Jun/2024:18:39:46 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:39:51,692 [INFO] 127.0.0.1 [20/Jun/2024:18:39:51 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:39:57,813 [INFO] 127.0.0.1 [20/Jun/2024:18:39:57 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:40:05,201 [INFO] 127.0.0.1 [20/Jun/2024:18:40:04 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:40:08,374 [INFO] 127.0.0.1 [20/Jun/2024:18:40:07 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:40:26,116 [INFO] 127.0.0.1 [20/Jun/2024:18:40:25 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:41:11,718 [INFO] 127.0.0.1 [20/Jun/2024:18:41:11 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:41:15,869 [INFO] 127.0.0.1 [20/Jun/2024:18:41:15 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:41:17,815 [INFO] 127.0.0.1 [20/Jun/2024:18:41:17 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:41:19,060 [INFO] 127.0.0.1 [20/Jun/2024:18:41:18 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:45:54,917 [INFO] 127.0.0.1 [20/Jun/2024:18:45:54 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:45:57,555 [INFO] 127.0.0.1 [20/Jun/2024:18:45:57 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:46:50,613 [INFO] 127.0.0.1 [20/Jun/2024:18:46:50 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:46:52,290 [INFO] 127.0.0.1 [20/Jun/2024:18:46:52 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:47:08,932 [INFO] 127.0.0.1 [20/Jun/2024:18:47:08 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:47:13,210 [INFO] 127.0.0.1 [20/Jun/2024:18:47:12 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:47:15,230 [INFO] 127.0.0.1 [20/Jun/2024:18:47:15 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:47:18,005 [INFO] 127.0.0.1 [20/Jun/2024:18:47:17 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:47:21,248 [INFO] 127.0.0.1 [20/Jun/2024:18:47:21 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:47:33,117 [INFO] 127.0.0.1 [20/Jun/2024:18:47:32 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:47:44,726 [INFO] 127.0.0.1 [20/Jun/2024:18:47:44 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:47:46,371 [INFO] 127.0.0.1 [20/Jun/2024:18:47:46 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:51:02,425 [INFO] 127.0.0.1 [20/Jun/2024:18:51:01 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-20 23:52:33,829 [INFO] 127.0.0.1 [20/Jun/2024:18:52:33 +0000] "GET /logs HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-21 00:01:52,484 [INFO] 127.0.0.1 [20/Jun/2024:19:01:52 +0000] "GET /logs HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-21 00:01:53,837 [INFO] 127.0.0.1 [20/Jun/2024:19:01:53 +0000] "GET /logs HTTP/1.1" 404 173 "-" "python-requests/2.31.0"

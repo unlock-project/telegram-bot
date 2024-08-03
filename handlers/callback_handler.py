@@ -44,11 +44,11 @@ async def answer_button_event(callback: types.CallbackQuery, state: FSMContext):
     data = json.loads(callback.data)
 
     if 'id' not in data:
-        await bot.send_message(chat_id, messages.error_message)
+        await bot.essage(chat_id, messages.error_message)
         await callback.message.delete()
         raise KeyError(f'No \'id\' in question keyboard data keys')
 
-    await bot.send_message(chat_id, messages.question_message)
+    await bot.essage(chat_id, messages.question_message)
     await callback.answer('')
     await UserState.answering_question.set()
     await state.update_data({"question_id": data['id'], 'message_id': callback.message.message_id})

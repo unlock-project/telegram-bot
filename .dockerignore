@@ -1,5 +1,6 @@
 *.env
 openapi.yaml
 back.api.yaml
+docker-compose.yml
 /venv
 /server/certs

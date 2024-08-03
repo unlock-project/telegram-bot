@@ -1,0 +1,9 @@
+2024-06-24 00:24:53,530 [INFO] Setting webhook
+2024-06-24 00:24:53,857 [INFO] Webhook set
+2024-06-24 00:25:16,127 [INFO] 127.0.0.1 [23/Jun/2024:19:25:16 +0000] "GET /logs HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-24 00:27:35,868 [INFO] 127.0.0.1 [23/Jun/2024:19:27:35 +0000] "GET /logs HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-24 00:30:12,909 [WARNING] Shutting down..
+2024-06-24 00:30:13,258 [WARNING] Bye!
+2024-06-24 00:30:13,259 [INFO] DB connection closed
+2024-06-24 00:30:15,420 [INFO] Setting webhook
+2024-06-24 00:30:15,785 [INFO] Webhook set

@@ -58,16 +58,6 @@ class AppBundle:
         app.on_shutdown.append(on_shutdown)
         # Setup API app
         app.add_subapp(API_PATH, api_app)
-        # Generate SSL context
-        # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-        # context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
-        # Start web-application.
-        # web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT, ssl_context=context)
-
-        # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
-        # sock.bind((WEBAPP_HOST, 0))
-        # print(sock.getsockname()[1])
 
         web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT)
 

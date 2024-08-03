@@ -19,11 +19,19 @@ routes = web.RouteTableDef()
 
 @routes.post('/sendmessage')
 async def sendMessage(request: web.Request, data: SendMessageRequest):
-    user = User.get_or_none(User.id==data.user_id)
-    if user is None:
-        return ErrorResponse(reason="User not found")
-    msg_id = (await bot.send_message(user.chat_id, data.message)).message_id
-    return MessageSentResponse(message=data.message, message_id = msg_id)
+    if data.user_id == 0:
+        users = User.select()
+        for user in users:
+            await bot.send_message(user.chat_id, data.message)
+        return web.json_response({"message": data.message, "status": "Message sent to all users"})
+    else:
+        user = User.get_or_none(User.id == data.user_id)
+        if user is None:
+            return web.json_response(ErrorResponse(reason="User not found").dict(), status=404)
+        msg_id = (await bot.send_message(user.chat_id, data.message)).message_id
+        return web.json_response(MessageSentResponse(message=data.message, message_id=msg_id).dict())
+
+
 @routes.post('/message/publish')
 async def apiMessage(request: web.Request, data: BroadcastMessageRequest):
     asyncio.get_running_loop().create_task(broadcast(data.message_text)) \

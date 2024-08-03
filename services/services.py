@@ -34,7 +34,6 @@ class InTaskException(Exception):
 async def broadcast(message_text: str):
     users = models.User.select()
     for user in users:
-
         successful = False
         while not successful:
             await asyncio.sleep(0.040)  # not more than 30 per second (25)

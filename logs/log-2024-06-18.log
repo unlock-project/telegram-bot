@@ -1,0 +1,70 @@
+2024-06-18 17:14:42,560 [INFO] Setting webhook
+2024-06-18 17:14:43,132 [INFO] Webhook set
+2024-06-18 17:22:47,445 [INFO] 127.0.0.1 [18/Jun/2024:12:22:47 +0000] "POST /sendscanner HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-18 17:22:59,811 [INFO] 127.0.0.1 [18/Jun/2024:12:22:59 +0000] "POST /sendscanner HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-18 17:24:44,347 [INFO] 127.0.0.1 [18/Jun/2024:12:24:44 +0000] "GET /logs HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-18 17:24:44,741 [INFO] 127.0.0.1 [18/Jun/2024:12:24:44 +0000] "GET /logs HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-18 17:24:47,254 [INFO] 127.0.0.1 [18/Jun/2024:12:24:47 +0000] "POST /sendscanner HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-18 17:25:08,405 [INFO] 127.0.0.1 [18/Jun/2024:12:25:08 +0000] "GET /logs HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-18 17:25:25,686 [INFO] 127.0.0.1 [18/Jun/2024:12:25:25 +0000] "POST /sendmessage HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-18 17:37:52,558 [INFO] User (, HoustonKek, 511329912) tries to log in
+2024-06-18 17:37:53,795 [ERROR] Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 257, in process_update
+    return await self.message_handlers.notify(update.message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 72, in start
+    await bot.send_message(message.chat.id, messages.qr_code_view, reply_markup=km.getQRViewKeyboard())
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\bot.py", line 346, in send_message
+    result = await self.request(api.Methods.SEND_MESSAGE, payload)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\base.py", line 236, in request
+    return await api.make_request(await self.get_session(), self.server, self.__token, method, data, files,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\api.py", line 140, in make_request
+    return check_result(method, response.content_type, response.status, await response.text())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\api.py", line 115, in check_result
+    exceptions.BadRequest.detect(description)
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\utils\exceptions.py", line 141, in detect
+    raise cls(description)
+aiogram.utils.exceptions.BadRequest: Inline keyboard button web app url 'http://127.0.0.1:8000/bot/qr' is invalid: only https links are allowed
+
+2024-06-18 17:37:53,928 [INFO] 127.0.0.1 [18/Jun/2024:12:37:52 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-18 17:38:14,817 [INFO] 127.0.0.1 [18/Jun/2024:12:38:13 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-18 17:38:16,442 [INFO] 127.0.0.1 [18/Jun/2024:12:38:16 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-18 17:38:18,936 [INFO] 127.0.0.1 [18/Jun/2024:12:38:18 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-18 17:38:22,962 [INFO] 127.0.0.1 [18/Jun/2024:12:38:22 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-18 17:38:24,290 [INFO] 127.0.0.1 [18/Jun/2024:12:38:24 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-18 17:38:29,888 [INFO] 127.0.0.1 [18/Jun/2024:12:38:29 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-18 17:38:32,413 [INFO] 127.0.0.1 [18/Jun/2024:12:38:32 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-18 17:38:35,810 [INFO] 127.0.0.1 [18/Jun/2024:12:38:35 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-18 17:38:39,247 [ERROR] Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 257, in process_update
+    return await self.message_handlers.notify(update.message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 333, in qr_request
+    await bot.send_message(chat_id, messages.qr_code_view, reply_markup=km.getQRViewKeyboard())
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\bot.py", line 346, in send_message
+    result = await self.request(api.Methods.SEND_MESSAGE, payload)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\base.py", line 236, in request
+    return await api.make_request(await self.get_session(), self.server, self.__token, method, data, files,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\api.py", line 140, in make_request
+    return check_result(method, response.content_type, response.status, await response.text())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\api.py", line 115, in check_result
+    exceptions.BadRequest.detect(description)
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\utils\exceptions.py", line 141, in detect
+    raise cls(description)
+aiogram.utils.exceptions.BadRequest: Inline keyboard button web app url 'http://127.0.0.1:8000/bot/qr' is invalid: only https links are allowed
+
+2024-06-18 17:38:39,324 [INFO] 127.0.0.1 [18/Jun/2024:12:38:39 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-18 17:42:05,910 [INFO] 127.0.0.1 [18/Jun/2024:12:42:05 +0000] "POST /sendmessage HTTP/1.1" 404 173 "-" "python-requests/2.31.0"
+2024-06-18 17:44:02,047 [INFO] 127.0.0.1 [18/Jun/2024:12:44:01 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"

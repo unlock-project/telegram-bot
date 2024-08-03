@@ -1,0 +1,351 @@
+2024-06-17 21:53:13,711 [INFO] Setting webhook
+2024-06-17 21:53:14,289 [INFO] Webhook set
+2024-06-17 21:53:16,783 [ERROR] Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 980, in _wrap_create_connection
+    return await self._loop.create_connection(*args, **kwargs)  # type: ignore[return-value]  # noqa
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 1086, in create_connection
+    raise exceptions[0]
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 1070, in create_connection
+    sock = await self._connect_sock(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 974, in _connect_sock
+    await self.sock_connect(sock, address)
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\proactor_events.py", line 726, in sock_connect
+    return await self._proactor.connect(sock, address)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\windows_events.py", line 854, in _poll
+    value = callback(transferred, key, ov)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\asyncio\windows_events.py", line 641, in finish_connect
+    ov.getresult()
+ConnectionRefusedError: [WinError 1225] The remote computer refused the network connection
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 257, in process_update
+    return await self.message_handlers.notify(update.message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 260, in score_request
+    raise ex
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 257, in score_request
+    data = await unlock_api.get_balance(user.id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\unlockapi\unlockapi.py", line 106, in get_balance
+    data = await self._get(APIMethods.USER_BALANCE, {'user_id': user_id})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\unlockapi\unlockapi.py", line 31, in _get
+    async with self.__session.get(
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\client.py", line 1167, in __aenter__
+    self._resp = await self._coro
+                 ^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\client.py", line 562, in _request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 540, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 901, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 1209, in _create_direct_connection
+    raise last_exc
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 1178, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiohttp\connector.py", line 988, in _wrap_create_connection
+    raise client_error(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host 127.0.0.1:8000 ssl:default [The remote computer refused the network connection]
+
+2024-06-17 21:53:18,935 [ERROR] HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /bot/api/error?token=dfa185bd24f7b77ee1b74fe9f841adf7 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000017462CE3A50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2024-06-17 21:53:18,936 [INFO] 127.0.0.1 [17/Jun/2024:16:53:14 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 21:53:20,997 [ERROR] Task exception was never retrieved
+future: <Task finished name='Task-16' coro=<log_error() done, defined at D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\services\services.py:193> exception=ConnectionError(MaxRetryError("HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /bot/api/error?token=dfa185bd24f7b77ee1b74fe9f841adf7 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000017462DFADD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))"))>
+Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connectionpool.py", line 793, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connectionpool.py", line 496, in _make_request
+    conn.request(
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connection.py", line 400, in request
+    self.endheaders()
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1298, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 1058, in _send_output
+    self.send(msg)
+  File "C:\Users\sturo_gpmk3vo\AppData\Local\Programs\Python\Python311\Lib\http\client.py", line 996, in send
+    self.connect()
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connection.py", line 238, in connect
+    self.sock = self._new_conn()
+                ^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connection.py", line 213, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x0000017462DFADD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\connectionpool.py", line 847, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\urllib3\util\retry.py", line 515, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /bot/api/error?token=dfa185bd24f7b77ee1b74fe9f841adf7 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000017462DFADD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\services\services.py", line 196, in log_error
+    result = requests.post(f"{UNLOCK_API_URL}/bot/api/error", params={'token': UNLOCK_API_TOKEN},
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\requests\adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /bot/api/error?token=dfa185bd24f7b77ee1b74fe9f841adf7 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000017462DFADD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2024-06-17 21:53:43,941 [INFO] 127.0.0.1 [17/Jun/2024:16:53:42 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 21:53:46,568 [INFO] 127.0.0.1 [17/Jun/2024:16:53:46 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 21:54:19,350 [ERROR] Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 257, in process_update
+    return await self.message_handlers.notify(update.message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 333, in qr_request
+    await bot.send_message(chat_id, messages.qr_code_view, reply_markup=km.getQRViewKeyboard())
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\bot.py", line 346, in send_message
+    result = await self.request(api.Methods.SEND_MESSAGE, payload)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\base.py", line 236, in request
+    return await api.make_request(await self.get_session(), self.server, self.__token, method, data, files,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\api.py", line 140, in make_request
+    return check_result(method, response.content_type, response.status, await response.text())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\api.py", line 115, in check_result
+    exceptions.BadRequest.detect(description)
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\utils\exceptions.py", line 141, in detect
+    raise cls(description)
+aiogram.utils.exceptions.BadRequest: Inline keyboard button web app url 'http://127.0.0.1:8000/bot/qr' is invalid: only https links are allowed
+
+2024-06-17 21:54:19,536 [INFO] 127.0.0.1 [17/Jun/2024:16:54:18 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 21:57:24,625 [INFO] 127.0.0.1 [17/Jun/2024:16:57:23 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 21:57:26,725 [INFO] 127.0.0.1 [17/Jun/2024:16:57:26 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 21:58:03,899 [INFO] 127.0.0.1 [17/Jun/2024:16:58:03 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 21:58:09,582 [INFO] 127.0.0.1 [17/Jun/2024:16:58:08 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 21:58:12,931 [INFO] 127.0.0.1 [17/Jun/2024:16:58:12 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 21:58:17,440 [INFO] 127.0.0.1 [17/Jun/2024:16:58:17 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 21:58:19,564 [INFO] 127.0.0.1 [17/Jun/2024:16:58:19 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 21:58:50,634 [INFO] 127.0.0.1 [17/Jun/2024:16:58:50 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 21:58:53,244 [INFO] 127.0.0.1 [17/Jun/2024:16:58:52 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 21:58:56,166 [INFO] 127.0.0.1 [17/Jun/2024:16:58:55 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 21:59:00,666 [INFO] 127.0.0.1 [17/Jun/2024:16:59:00 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:00:12,578 [WARNING] Shutting down..
+2024-06-17 22:00:13,022 [WARNING] Bye!
+2024-06-17 22:00:13,023 [INFO] DB connection closed
+2024-06-17 22:01:21,089 [INFO] Setting webhook
+2024-06-17 22:01:21,858 [INFO] Webhook set
+2024-06-17 22:01:49,486 [INFO] 127.0.0.1 [17/Jun/2024:17:01:48 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:01:55,809 [INFO] 127.0.0.1 [17/Jun/2024:17:01:55 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:02:24,196 [INFO] 127.0.0.1 [17/Jun/2024:17:02:23 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:02:25,691 [INFO] 127.0.0.1 [17/Jun/2024:17:02:25 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:02:41,695 [INFO] 127.0.0.1 [17/Jun/2024:17:02:41 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:02:50,055 [INFO] 127.0.0.1 [17/Jun/2024:17:02:50 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:02:55,023 [INFO] 127.0.0.1 [17/Jun/2024:17:02:55 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:03:01,387 [INFO] 127.0.0.1 [17/Jun/2024:17:03:00 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:03:06,963 [INFO] 127.0.0.1 [17/Jun/2024:17:03:06 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:03:29,240 [INFO] 127.0.0.1 [17/Jun/2024:17:03:28 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:03:54,043 [INFO] 127.0.0.1 [17/Jun/2024:17:03:54 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:04:17,847 [INFO] 127.0.0.1 [17/Jun/2024:17:04:17 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:04:24,110 [INFO] 127.0.0.1 [17/Jun/2024:17:04:24 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:04:36,223 [INFO] 127.0.0.1 [17/Jun/2024:17:04:36 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:04:43,851 [INFO] 127.0.0.1 [17/Jun/2024:17:04:43 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:06:58,256 [INFO] 127.0.0.1 [17/Jun/2024:17:06:57 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:07:26,665 [ERROR] Traceback (most recent call last):
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 119, in make_admin
+    args = message.text.split()[1]
+           ~~~~~~~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+
+2024-06-17 22:07:26,667 [INFO] 127.0.0.1 [17/Jun/2024:17:07:26 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:07:52,934 [ERROR] Traceback (most recent call last):
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 120, in make_admin
+    user = models.User.get((models.User.chat_id == int(args)))
+                                                   ^^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'Queeenace'
+
+2024-06-17 22:07:52,935 [INFO] 127.0.0.1 [17/Jun/2024:17:07:52 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:08:01,897 [INFO] 127.0.0.1 [17/Jun/2024:17:08:01 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:09:33,271 [ERROR] Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\peewee.py", line 7072, in get
+    return clone.execute(database)[0]
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\peewee.py", line 4436, in __getitem__
+    return self.row_cache[item]
+           ~~~~~~~~~~~~~~^^^^^^
+IndexError: list index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 120, in make_admin
+    user = models.User.get((models.User.chat_id == int(args)))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\peewee.py", line 6624, in get
+    return sq.get()
+           ^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\peewee.py", line 7075, in get
+    raise self.model.DoesNotExist('%s instance matching query does '
+utils.models.UserDoesNotExist: <Model: User> instance matching query does not exist:
+SQL: SELECT "t1"."chat_id", "t1"."id", "t1"."is_admin", "t1"."admin_mode", "t1"."is_banned", "t1"."first_name", "t1"."last_name" FROM "user" AS "t1" WHERE ("t1"."chat_id" = %s) LIMIT %s OFFSET %s
+Params: [4, 1, 0]
+
+2024-06-17 22:09:33,272 [INFO] 127.0.0.1 [17/Jun/2024:17:09:33 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:09:53,772 [INFO] 127.0.0.1 [17/Jun/2024:17:09:53 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:09:58,652 [INFO] 127.0.0.1 [17/Jun/2024:17:09:58 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:10:12,929 [ERROR] Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\peewee.py", line 7072, in get
+    return clone.execute(database)[0]
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\peewee.py", line 4436, in __getitem__
+    return self.row_cache[item]
+           ~~~~~~~~~~~~~~^^^^^^
+IndexError: list index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 120, in make_admin
+    user = models.User.get((models.User.chat_id == int(args)))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\peewee.py", line 6624, in get
+    return sq.get()
+           ^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\peewee.py", line 7075, in get
+    raise self.model.DoesNotExist('%s instance matching query does '
+utils.models.UserDoesNotExist: <Model: User> instance matching query does not exist:
+SQL: SELECT "t1"."chat_id", "t1"."id", "t1"."is_admin", "t1"."admin_mode", "t1"."is_banned", "t1"."first_name", "t1"."last_name" FROM "user" AS "t1" WHERE ("t1"."chat_id" = %s) LIMIT %s OFFSET %s
+Params: [5, 1, 0]
+
+2024-06-17 22:10:12,931 [INFO] 127.0.0.1 [17/Jun/2024:17:10:12 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:18:21,182 [ERROR] Traceback (most recent call last):
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 119, in make_admin
+    args = message.text.split()[1]
+           ~~~~~~~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+
+2024-06-17 22:18:21,183 [INFO] 127.0.0.1 [17/Jun/2024:17:18:21 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:18:24,918 [INFO] 127.0.0.1 [17/Jun/2024:17:18:24 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:18:39,752 [INFO] 127.0.0.1 [17/Jun/2024:17:18:39 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:18:42,873 [INFO] 127.0.0.1 [17/Jun/2024:17:18:42 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:18:44,982 [INFO] 127.0.0.1 [17/Jun/2024:17:18:44 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:18:47,662 [INFO] 127.0.0.1 [17/Jun/2024:17:18:47 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:18:50,126 [INFO] 127.0.0.1 [17/Jun/2024:17:18:49 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:19:06,703 [INFO] 127.0.0.1 [17/Jun/2024:17:19:06 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:19:14,059 [INFO] 127.0.0.1 [17/Jun/2024:17:19:14 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:19:19,125 [INFO] 127.0.0.1 [17/Jun/2024:17:19:18 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:19:22,884 [INFO] 127.0.0.1 [17/Jun/2024:17:19:22 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 22:19:24,564 [INFO] 127.0.0.1 [17/Jun/2024:17:19:24 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:25:09,875 [INFO] 127.0.0.1 [17/Jun/2024:18:25:09 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:25:14,410 [INFO] 127.0.0.1 [17/Jun/2024:18:25:14 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:25:17,751 [ERROR] Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 257, in process_update
+    return await self.message_handlers.notify(update.message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 333, in qr_request
+    await bot.send_message(chat_id, messages.qr_code_view, reply_markup=km.getQRViewKeyboard())
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\bot.py", line 346, in send_message
+    result = await self.request(api.Methods.SEND_MESSAGE, payload)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\base.py", line 236, in request
+    return await api.make_request(await self.get_session(), self.server, self.__token, method, data, files,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\api.py", line 140, in make_request
+    return check_result(method, response.content_type, response.status, await response.text())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\api.py", line 115, in check_result
+    exceptions.BadRequest.detect(description)
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\utils\exceptions.py", line 141, in detect
+    raise cls(description)
+aiogram.utils.exceptions.BadRequest: Inline keyboard button web app url 'http://127.0.0.1:8000/bot/qr' is invalid: only https links are allowed
+
+2024-06-17 23:25:17,942 [INFO] 127.0.0.1 [17/Jun/2024:18:25:17 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:25:19,437 [INFO] 127.0.0.1 [17/Jun/2024:18:25:19 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:25:21,983 [INFO] 127.0.0.1 [17/Jun/2024:18:25:21 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:25:36,276 [INFO] 127.0.0.1 [17/Jun/2024:18:25:35 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:25:54,142 [INFO] 127.0.0.1 [17/Jun/2024:18:25:53 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:26:06,684 [INFO] 127.0.0.1 [17/Jun/2024:18:26:06 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:26:08,629 [INFO] 127.0.0.1 [17/Jun/2024:18:26:08 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:26:12,651 [INFO] 127.0.0.1 [17/Jun/2024:18:26:12 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:26:17,621 [INFO] 127.0.0.1 [17/Jun/2024:18:26:17 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:26:25,816 [INFO] 127.0.0.1 [17/Jun/2024:18:26:25 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:26:28,629 [INFO] 127.0.0.1 [17/Jun/2024:18:26:28 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:26:34,887 [INFO] 127.0.0.1 [17/Jun/2024:18:26:34 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:27:09,090 [INFO] 127.0.0.1 [17/Jun/2024:18:27:09 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:27:57,497 [INFO] 127.0.0.1 [17/Jun/2024:18:27:57 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:28:06,739 [INFO] 127.0.0.1 [17/Jun/2024:18:28:06 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:31:09,145 [INFO] 127.0.0.1 [17/Jun/2024:18:31:08 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:31:10,524 [INFO] 127.0.0.1 [17/Jun/2024:18:31:10 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:31:14,051 [INFO] 127.0.0.1 [17/Jun/2024:18:31:13 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:33:42,550 [INFO] 127.0.0.1 [17/Jun/2024:18:33:41 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:33:43,634 [INFO] 127.0.0.1 [17/Jun/2024:18:33:43 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:49:46,715 [ERROR] Traceback (most recent call last):
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 257, in process_update
+    return await self.message_handlers.notify(update.message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\handlers\message_handler.py", line 333, in qr_request
+    await bot.send_message(chat_id, messages.qr_code_view, reply_markup=km.getQRViewKeyboard())
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\bot.py", line 346, in send_message
+    result = await self.request(api.Methods.SEND_MESSAGE, payload)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\base.py", line 236, in request
+    return await api.make_request(await self.get_session(), self.server, self.__token, method, data, files,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\api.py", line 140, in make_request
+    return check_result(method, response.content_type, response.status, await response.text())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\bot\api.py", line 115, in check_result
+    exceptions.BadRequest.detect(description)
+  File "d:\Users\sturo_gpmk3vo\programming\Unlock\smena\telegram-bot\.venv\Lib\site-packages\aiogram\utils\exceptions.py", line 141, in detect
+    raise cls(description)
+aiogram.utils.exceptions.BadRequest: Inline keyboard button web app url 'http://127.0.0.1:8000/bot/qr' is invalid: only https links are allowed
+
+2024-06-17 23:49:46,783 [INFO] 127.0.0.1 [17/Jun/2024:18:49:46 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"
+2024-06-17 23:49:48,194 [INFO] 127.0.0.1 [17/Jun/2024:18:49:47 +0000] "POST /bot/ HTTP/1.1" 200 153 "-" "-"

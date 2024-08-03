@@ -20,7 +20,6 @@ from utils.settings import SUPER_ADMIN
 
 
 
-
 @dp.message_handler(filters.Text(equals=messages.stop_tunnel), state=UserState.in_tunnel)
 async def stop_tunnel(message: types.Message, state: FSMContext):
     companion_data = InTunnelData(**(await state.get_data()))
@@ -35,6 +34,7 @@ async def stop_tunnel(message: types.Message, state: FSMContext):
                            text=f"{companion_data.role} завершил диалог",
                            reply_markup=km.getMainKeyboard(companion) if companion is not None else None)
 
+
 @dp.message_handler(state=UserState.in_tunnel, content_types='any')
 async def in_tunnel(message: types.Message, state: FSMContext):
     if message.content_type == "poll":
@@ -42,6 +42,7 @@ async def in_tunnel(message: types.Message, state: FSMContext):
     companion_data = InTunnelData(**(await state.get_data()))
     await bot.copy_message(chat_id=companion_data.companion_chat_id, from_chat_id=message.chat.id,
                            message_id=message.message_id)
+
 
 @dp.message_handler(commands="start")
 async def start(message: types.Message):
@@ -127,6 +128,7 @@ async def make_admin(message: types.Message):
     except:
         logging.error(traceback.format_exc())
 
+
 @dp.message_handler(commands="revoke")
 async def revoke_admin(message: types.Message):
     chat_id = message.chat.id
@@ -148,6 +150,7 @@ async def revoke_admin(message: types.Message):
     except:
         logging.error(traceback.format_exc())
 
+
 @dp.message_handler(IsAdmin(), commands="ban")
 async def ban_user(message: types.Message):
     chat_id = message.chat.id
@@ -167,6 +170,7 @@ async def ban_user(message: types.Message):
     except:
         logging.error(traceback.format_exc())
 
+
 @dp.message_handler(IsAdmin(), commands="unban")
 async def ban_user(message: types.Message):
     chat_id = message.chat.id
@@ -185,6 +189,7 @@ async def ban_user(message: types.Message):
         await bot.send_message(chat_id, messages.unban_user.format(user_name=f'{user.first_name} {user.last_name}'))
     except:
         logging.error(traceback.format_exc())
+
 
 @dp.message_handler(IsAdmin(), commands="webapp")
 async def webapp_keyboard(message: types.Message):
@@ -212,6 +217,7 @@ async def answer_question(message: types.Message, state: FSMContext):
 async def promo_message(message: types.Message):
     await UserState.entering_promocode.set()
     await bot.send_message(message.chat.id, messages.enter_promocode_message)
+
 
 @dp.message_handler(state=UserState.entering_promocode)
 async def promocode_enter(message: types.Message, state: FSMContext):
@@ -255,33 +261,8 @@ async def score_request(message: types.Message):
     await bot.send_message(chat_id, messages.score_message.format(score=data.balance))
 
 
-@dp.message_handler(filters.Text(equals=messages.daily_report))
-async def daily_report(message: types.Message):
-    chat_id = message.chat.id
 
-    try:
-        user = models.User.get(chat_id=chat_id)
-    except:
-        await bot.send_message(chat_id, messages.not_met.format(bot=settings.BOT_USERNAME))
-        return
-    # do magic with api
-    try:
-        data = await unlock_api.events_today(user.id)
-    except ResponseException as ex:
-        if ex.status_code == 404 and ex.has_reason:
-            await bot.send_message(chat_id, messages.no_event_today)
-            return
-        else:
-            await bot.send_message(message.chat.id, messages.error_message)
-            raise ex
-    except Exception as ex:
-        await bot.send_message(message.chat.id, messages.error_message)
-        raise ex
 
-    if not data.message:
-        await bot.send_message(chat_id, messages.no_event_today)
-        return
-    await bot.send_message(chat_id, messages.daily_report_message.format(report=data.message))
 
 @dp.message_handler(filters.Text(equals=messages.team_report))
 async def team_report(message: types.Message):
@@ -312,6 +293,7 @@ async def team_report(message: types.Message):
                                                                  tutor='' if tutor is None else f"{tutor.first_name} "
                                                                                                 f"{tutor.last_name}"))
 
+
 @dp.message_handler(filters.Text(equals=messages.qr_request))
 async def qr_request(message: types.Message):
     chat_id = message.chat.id
@@ -323,6 +305,7 @@ async def qr_request(message: types.Message):
         return
 
     await bot.send_message(chat_id, messages.qr_code_view, reply_markup=km.getQRViewKeyboard())
+
 
 @dp.message_handler(IsAdmin(), filters.Text(equals=messages.turn_on_admin))
 async def turn_on_admin_button(message: types.Message):
@@ -370,10 +353,12 @@ async def back_button(message: types.Message):
     await bot.send_message(message.chat.id, messages.ok_message,
                            reply_markup=km.getMainKeyboard(user))
 
+
 @dp.message_handler(IsAdmin(), filters.Text(equals=messages.start_tunnel))
 async def start_tunnel_button(message: types.Message, state: FSMContext):
     await state.set_state(UserState.opening_tunnel)
     await bot.send_message(message.chat.id, messages.choose_companion)
+
 
 @dp.message_handler(IsAdmin(), state=UserState.opening_tunnel)
 async def chose_tunnel_id(message: types.Message, state: FSMContext):

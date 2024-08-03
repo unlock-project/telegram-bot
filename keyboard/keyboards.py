@@ -16,11 +16,13 @@ def getTestQRScannerKeyboard():
     kb.add(InlineKeyboardButton(messages.go_to_web, web_app=WebAppInfo(url=f'{UNLOCK_API_URL}/bot/scanner')))
     return kb
 
+
 def getQRScannerKeyboard(event_id: int):
     kb = InlineKeyboardMarkup()
     kb.add(InlineKeyboardButton(messages.open_scanner,
                                 web_app=WebAppInfo(url=f'{UNLOCK_API_URL}/bot/scanner?event_id={event_id}')))
     return kb
+
 
 def getQRViewKeyboard():
     kb = InlineKeyboardMarkup()
@@ -99,10 +101,12 @@ def getVoteKeyboard(vote_id: int, options: typing.List[schemas.Option]):
 
     return vote_keyboard
 
+
 def getTunnelKeyboard():
     tunnel_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
     tunnel_keyboard.add(messages.stop_tunnel)
     return tunnel_keyboard
+
 
 def getMainKeyboard(user: User):
     keyboard = types.reply_keyboard.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -112,8 +116,8 @@ def getMainKeyboard(user: User):
         keyboard.add(messages.start_tunnel)
         keyboard.add(messages.turn_off_admin)
     else:
-        keyboard.add(messages.score_request, messages.daily_report)
-        keyboard.add(messages.promocode, messages.team_report)
+        keyboard.add(messages.score_request, messages.team_report)
+        keyboard.add(messages.promocode)
         keyboard.add(messages.qr_request)
         if user.is_admin:
             keyboard.add(messages.turn_on_admin)
