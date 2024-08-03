@@ -14,7 +14,7 @@ class UserSchema(BaseModel):
     first_name: constr(max_length=150) = Field(..., title='First Name')
     last_name: constr(max_length=150) = Field(..., title='Last Name')
     qr: constr(max_length=100) = Field(..., title='Qr')
-    team: int = Field(..., title='Team')
+    team: Optional[int] = Field(None, title='Team')
 
 
 class BotRegisterSchema(BaseModel):
@@ -23,7 +23,7 @@ class BotRegisterSchema(BaseModel):
 
 class TeamSchema(BaseModel):
     name: constr(max_length=100) = Field(..., title='Name')
-    balance: int = Field(..., title='Balance')
+    balance: float = Field(..., title='Balance')
     tutor: int = Field(..., title='Tutor')
 
 
@@ -72,3 +72,11 @@ class ChoiceBotSchema(BaseModel):
     vote_id: int = Field(..., title='Vote Id')
     user_id: int = Field(..., title='User Id')
     option_id: int = Field(..., title='Option Id')
+
+class ReportSchema(BaseModel):
+    user_id: int = Field(...)
+    report_text: str = Field(...)
+
+class ReportResponse(BaseModel):
+    report_id: int = Field(...)
+    report_status: str = Field(...)

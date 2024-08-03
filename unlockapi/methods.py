@@ -10,3 +10,4 @@ class APIMethods(enum.Enum):
     REGISTRATION_RESPONSE = '/bot/api/registration/response'
     VOTE_RESPONSE = '/bot/api/vote/response'
     USER_BALANCE = '/api/users/balance'
+    REPORT = '/bot/api/report'

@@ -11,9 +11,11 @@ import keyboard as km
 import services
 from instances import dp, bot, unlock_api
 from states import UserState, InTunnelData
+from unlockapi.errors import ResponseException
 from utils import models, messages
 from utils.models import User
 from utils.my_filters import IsAdmin
+from utils import settings
 from utils.settings import SUPER_ADMIN
 
 
@@ -52,8 +54,12 @@ async def start(message: types.Message):
         return
     except:
         logging.info(f"User ({args}, {username if username is not None else ''}, {message.chat.id}) tries to log in")
-
-    user_data = await unlock_api.register_user(username)
+    try:
+        user_data = await unlock_api.register_user(username)
+    except Exception as ex:
+        logging.error(str(ex))
+        await bot.send_message(message.chat.id, messages.user_not_found)
+        return
     logging.info(f"New user with data: {user_data}")
 
     user = models.User.create(chat_id=message.chat.id, id=user_data.id, first_name=user_data.first_name,
@@ -70,6 +76,28 @@ async def start(message: types.Message):
 async def clear_keyboard(message: types.Message):
     await bot.send_message(chat_id=message.chat.id, text=messages.cleared_message,
                            reply_markup=types.reply_keyboard.ReplyKeyboardRemove())
+
+
+@dp.message_handler(commands='report')
+async def report_message(message: types.Message):
+    text = message.get_args()
+    user: User = User.get_or_none(chat_id=message.chat.id)
+
+    if user is None:
+        await bot.send_message(message.chat.id, messages.not_met.format(bot=settings.BOT_USERNAME))
+        return
+
+    if not text:
+        await bot.send_message(message.chat.id, messages.enter_text)
+        return
+
+    # sent to back
+    data = await unlock_api.report(user.id, text)
+
+    await bot.send_message(settings.SUPER_ADMIN, messages.new_report.format(report_id=data.report_id,
+                                                                            report_text=text))
+    await bot.send_message(message.chat.id, messages.report_sent.format(report_id=data.report_id))
+
 
 
 @dp.message_handler(IsAdmin(), commands="raise")
@@ -171,7 +199,11 @@ async def answer_question(message: types.Message, state: FSMContext):
     message_id = state_data["message_id"]
     await state.finish()
     user = models.User.get((models.User.chat_id == message.chat.id))
-    data = (await unlock_api.question_answer(question_id, user.id, answer))
+    try:
+        data = (await unlock_api.question_answer(question_id, user.id, answer))
+    except Exception as ex:
+        await bot.send_message(message.chat.id, messages.error_message)
+        raise ex
     await bot.send_message(message.chat.id, data.text)
     await bot.edit_message_reply_markup(message.chat.id, message_id, reply_markup='')
 
@@ -189,10 +221,13 @@ async def promocode_enter(message: types.Message, state: FSMContext):
 
     user = models.User.get_or_none(User.chat_id == chat_id)
     if user is None:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=settings.BOT_USERNAME))
         return
-
-    result = await unlock_api.promo_activate(promocode, user.id)
+    try:
+        result = await unlock_api.promo_activate(promocode, user.id)
+    except Exception as ex:
+        await bot.send_message(message.chat.id, messages.error_message)
+        raise ex
     await bot.send_message(chat_id, result.text)
 
 
@@ -209,10 +244,14 @@ async def score_request(message: types.Message):
     try:
         user = models.User.get(chat_id=chat_id)
     except:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=settings.BOT_USERNAME))
         return
 
-    data = await unlock_api.get_balance(user.id)
+    try:
+        data = await unlock_api.get_balance(user.id)
+    except Exception as ex:
+        await bot.send_message(message.chat.id, messages.error_message)
+        raise ex
     await bot.send_message(chat_id, messages.score_message.format(score=data.balance))
 
 
@@ -223,10 +262,22 @@ async def daily_report(message: types.Message):
     try:
         user = models.User.get(chat_id=chat_id)
     except:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=settings.BOT_USERNAME))
         return
     # do magic with api
-    data = await unlock_api.events_today(user.id)
+    try:
+        data = await unlock_api.events_today(user.id)
+    except ResponseException as ex:
+        if ex.status_code == 404 and ex.has_reason:
+            await bot.send_message(chat_id, messages.no_event_today)
+            return
+        else:
+            await bot.send_message(message.chat.id, messages.error_message)
+            raise ex
+    except Exception as ex:
+        await bot.send_message(message.chat.id, messages.error_message)
+        raise ex
+
     if not data.message:
         await bot.send_message(chat_id, messages.no_event_today)
         return
@@ -239,14 +290,25 @@ async def team_report(message: types.Message):
     try:
         user = models.User.get(chat_id=chat_id)
     except:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=settings.BOT_USERNAME))
         return
 
-    data = await unlock_api.user_team(user.id)
+    try:
+        data = await unlock_api.user_team(user.id)
+    except ResponseException as ex:
+        if ex.status_code == 404 and ex.has_reason:
+            await bot.send_message(chat_id, messages.team_not_found)
+            return
+        else:
+            await bot.send_message(message.chat.id, messages.error_message)
+            raise ex
+    except Exception as ex:
+        await bot.send_message(message.chat.id, messages.error_message)
+        raise ex
 
     tutor: User = models.User.get_or_none(id=data.tutor)
 
-    await bot.send_message(chat_id, messages.team_message.format(name=data.name, score=data.balance,
+    await bot.send_message(chat_id, messages.team_message.format(name=data.name, score=round(data.balance, 1),
                                                                  tutor='' if tutor is None else f"{tutor.first_name} "
                                                                                                 f"{tutor.last_name}"))
 
@@ -257,7 +319,7 @@ async def qr_request(message: types.Message):
     try:
         user = models.User.get(chat_id=chat_id)
     except:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=settings.BOT_USERNAME))
         return
 
     await bot.send_message(chat_id, messages.qr_code_view, reply_markup=km.getQRViewKeyboard())
@@ -268,7 +330,7 @@ async def turn_on_admin_button(message: types.Message):
     try:
         user: models.User = models.User.get(models.User.chat_id == chat_id)
     except:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=settings.BOT_USERNAME))
         return
 
     user.admin_mode = True
@@ -283,7 +345,7 @@ async def turn_off_admin_button(message: types.Message):
     try:
         user: models.User = models.User.get(models.User.chat_id == chat_id)
     except:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=settings.BOT_USERNAME))
         return
     user.admin_mode = False
     user.save()
@@ -303,7 +365,7 @@ async def back_button(message: types.Message):
     try:
         user = models.User.get(chat_id=chat_id)
     except:
-        await bot.send_message(chat_id, messages.not_met)
+        await bot.send_message(chat_id, messages.not_met.format(bot=settings.BOT_USERNAME))
         return
     await bot.send_message(message.chat.id, messages.ok_message,
                            reply_markup=km.getMainKeyboard(user))

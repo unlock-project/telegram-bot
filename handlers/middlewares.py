@@ -64,6 +64,34 @@ class ThrottlingMiddleware(BaseMiddleware):
             # Cancel current handler
             raise CancelHandler()
 
+    async def on_process_callback_query(self, callback_query: CallbackQuery, data: dict):
+        """
+        This handler is called when dispatcher receives a message
+
+        :param callback_query:
+        """
+        # Get current handler
+        handler = current_handler.get()
+
+        # Get dispatcher from context
+        # If handler was configured, get rate limit and key from handler
+        if handler:
+            limit = getattr(handler, 'throttling_rate_limit', self.rate_limit)
+            key = getattr(handler, 'throttling_key', f"{self.prefix}_{handler.__name__}")
+        else:
+            limit = self.rate_limit
+            key = f"{self.prefix}_callback_query"
+
+        # Use Dispatcher.throttle method.
+        try:
+            await dp.throttle(key, rate=limit)
+        except Throttled as t:
+            # Execute action
+            await callback_query.answer(messages.throttled)
+
+            # Cancel current handler
+            raise CancelHandler()
+
 
 dp.middleware.setup(UserBannedMiddleware())
 dp.middleware.setup(ThrottlingMiddleware())
